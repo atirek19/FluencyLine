@@ -1,0 +1,1377 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="theme-color" content="#0F4C47">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Fluency Line</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F3F6F2; --surface:#FFFFFF; --ink:#15302D; --muted:#5A6F6A; --line:#D3DFD9;
+  --pine:#0F4C47; --on-pine:#FFFFFF; --gold:#A87700; --signal:#F2B705; --on-signal:#1C1A10; --sea:#DFEDE7; --bad:#A8322A;
+  --display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body:"Atkinson Hyperlegible", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --nav:64px;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0B1615; --surface:#122220; --ink:#E3EEEA; --muted:#93A8A2; --line:#22403B;
+    --pine:#6BC0B2; --on-pine:#08201D; --gold:#E2B33C; --signal:#F5C842; --on-signal:#1C1A10; --sea:#173430; --bad:#F08A80;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0B1615; --surface:#122220; --ink:#E3EEEA; --muted:#93A8A2; --line:#22403B;
+  --pine:#6BC0B2; --on-pine:#08201D; --gold:#E2B33C; --signal:#F5C842; --on-signal:#1C1A10; --sea:#173430; --bad:#F08A80;
+}
+*,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none !important}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px);-webkit-text-size-adjust:100%}
+body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.5;padding-bottom:calc(var(--nav) + 16px)}
+h1,h2,h3{font-family:var(--display);line-height:1.15;margin:0;letter-spacing:-0.01em}
+h1{font-size:1.75rem;font-weight:800}
+h2{font-size:1.3rem;font-weight:700}
+h3{font-size:1.05rem;font-weight:700}
+p{margin:0 0 .6em}
+a{color:var(--pine)}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--signal);outline-offset:2px;border-radius:6px}
+.wrap{max-width:640px;margin:0 auto;padding:0 18px}
+
+/* header */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:12px;padding-bottom:12px}
+.brand{font-family:var(--display);font-weight:800;font-size:1.1rem;display:flex;align-items:center;gap:8px}
+.brand i{width:14px;height:14px;border-radius:50%;background:var(--signal);box-shadow:0 0 0 3px var(--pine);display:inline-block}
+.streak{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 12px;font-size:.9rem;display:flex;gap:6px;align-items:center}
+.streak b{font-family:var(--display)}
+
+/* nav */
+.nav{position:fixed;left:0;right:0;bottom:0;z-index:10;background:var(--surface);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
+.nav .row{max-width:640px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr);height:var(--nav)}
+.nav button{background:none;border:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:.75rem;color:var(--muted)}
+.nav button svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.nav button[aria-current="page"]{color:var(--pine);font-weight:700}
+
+main{padding-top:18px}
+.lede{color:var(--muted);margin-top:4px}
+.sec{margin:26px 0}
+.sec > h2{margin-bottom:10px}
+
+/* deep session hero */
+.deep{background:var(--pine);color:var(--on-pine);border-radius:18px;padding:20px;position:relative;overflow:hidden}
+.deep .meta{font-size:.9rem;opacity:.85}
+.deep h1{margin:6px 0 10px;font-size:1.6rem}
+.deep .track{display:flex;gap:4px;margin:14px 0 16px}
+.deep .track span{flex:1;height:6px;border-radius:3px;background:color-mix(in srgb,var(--on-pine) 25%,transparent)}
+.deep .track span.on{background:var(--signal)}
+.btn{text-decoration:none;display:inline-flex;text-align:center;align-items:center;justify-content:center;gap:8px;border:0;border-radius:12px;padding:12px 16px;font-weight:700;min-height:46px}
+.btn.primary{background:var(--pine);color:var(--on-pine)}
+.btn.signal{background:var(--signal);color:var(--on-signal)}
+.btn.ghost{background:transparent;border:1px solid var(--line);color:var(--ink)}
+.btn.small{min-height:38px;padding:8px 12px;font-size:.92rem;border-radius:10px}
+.btn:disabled{opacity:.5;cursor:default}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+
+/* bursts */
+.bursts{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+.bursts li{border-bottom:1px solid var(--line)}
+.bursts button{width:100%;background:none;border:0;text-align:left;display:grid;grid-template-columns:28px 1fr auto;gap:12px;align-items:center;padding:14px 2px}
+.tick{width:24px;height:24px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center}
+.done .tick{background:var(--pine);border-color:var(--pine)}
+.done .tick::after{content:"";width:9px;height:5px;border-left:2px solid var(--on-pine);border-bottom:2px solid var(--on-pine);transform:rotate(-45deg) translate(1px,-1px)}
+.bursts .bt{font-weight:700}
+.bursts .bd{font-size:.9rem;color:var(--muted)}
+.bursts .min{font-size:.85rem;color:var(--muted)}
+.meter{display:flex;justify-content:space-between;font-size:.9rem;color:var(--muted);margin-top:8px}
+
+/* ask box */
+.ask{background:var(--sea);border-radius:16px;padding:16px}
+.ask label{font-weight:700;display:block;margin-bottom:8px}
+.field{width:100%;font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px}
+textarea.field{min-height:110px;resize:vertical}
+.inline{display:flex;gap:8px}
+.inline .field{flex:1}
+.out{margin-top:12px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px;font-size:.98rem}
+.out:empty{display:none}
+.out h3{margin:12px 0 4px;font-size:1rem}
+.out h3:first-child{margin-top:0}
+.out ul{margin:4px 0 8px;padding-left:20px}
+.out .thinking{color:var(--muted)}
+body:not(.ai) .ai-only{display:none !important}
+body.ai .ai-off{display:none !important}
+.hint{font-size:.88rem;color:var(--muted);margin-top:6px}
+
+/* path: transit line */
+.line{position:relative;margin:8px 0 0;padding:0;list-style:none}
+.line::before{content:"";position:absolute;left:15px;top:14px;bottom:14px;width:6px;border-radius:3px;background:var(--pine)}
+.stn{position:relative;padding-left:48px;margin-bottom:6px}
+.stn > button{width:100%;text-align:left;background:none;border:0;padding:10px 0;display:block}
+.dot{position:absolute;left:6px;top:12px;width:24px;height:24px;border-radius:50%;background:var(--surface);border:5px solid var(--pine)}
+.stn.complete .dot{background:var(--pine)}
+.stn.current .dot{background:var(--signal);border-color:var(--pine);transform:scale(1.18)}
+.stn .wk{font-size:.85rem;color:var(--muted)}
+.stn .nm{font-family:var(--display);font-weight:700;font-size:1.12rem}
+.stn .sb{font-size:.92rem;color:var(--muted)}
+.stn .bar{height:4px;background:var(--line);border-radius:2px;margin-top:6px;max-width:220px}
+.stn .bar span{display:block;height:100%;background:var(--pine);border-radius:2px}
+.days{list-style:none;padding:0;margin:4px 0 14px}
+.days button{width:100%;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:6px;display:flex;justify-content:space-between;gap:10px;align-items:center}
+.days .ok{color:var(--pine);font-weight:700;font-size:.85rem;white-space:nowrap}
+
+/* lesson */
+.phase{border-left:4px solid var(--line);padding:4px 0 4px 14px;margin:22px 0}
+.phase.live{border-color:var(--signal)}
+.phase .ph{font-size:.88rem;color:var(--muted);margin-bottom:2px}
+.phase ul{padding-left:20px;margin:8px 0}
+.phase li{margin-bottom:6px}
+.say{font-family:var(--display);font-size:1.15rem;font-weight:500;line-height:1.35;background:var(--sea);border-radius:14px;padding:14px 16px;margin:8px 0}
+.timer{position:sticky;top:calc(env(safe-area-inset-top,0px) + 58px);z-index:4;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:10px 12px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.timer .clock{font-family:var(--display);font-weight:800;font-size:1.3rem;font-variant-numeric:tabular-nums}
+.timer .pl{font-size:.9rem;color:var(--muted)}
+.back{background:none;border:0;color:var(--pine);font-weight:700;padding:6px 0;margin-bottom:6px}
+
+/* cards */
+.flash{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:22px;min-height:220px;display:flex;flex-direction:column;justify-content:center}
+.flash .term{font-family:var(--display);font-weight:800;font-size:1.6rem}
+.flash .def{margin-top:12px}
+.flash .pmo{margin-top:10px;color:var(--muted);font-size:.95rem}
+.count{font-size:.9rem;color:var(--muted);margin-bottom:8px}
+.boxes{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:10px}
+.boxes div{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:8px;text-align:center}
+.boxes b{display:block;font-family:var(--display);font-size:1.2rem}
+.boxes span{font-size:.75rem;color:var(--muted)}
+.glossary details{border-bottom:1px solid var(--line);padding:10px 0}
+.glossary summary{font-weight:700;cursor:pointer}
+.glossary p{margin:6px 0 0}
+.opt{display:block;width:100%;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:8px}
+.opt.right{border-color:var(--pine);background:var(--sea)}
+.opt.wrong{border-color:var(--bad)}
+
+/* speak */
+.chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;scrollbar-width:none}
+.chip{flex:none;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:8px 14px;font-size:.92rem}
+.chip[aria-pressed="true"]{background:var(--pine);color:var(--on-pine);border-color:var(--pine)}
+.phr{list-style:none;padding:0;margin:10px 0 0}
+.phr li{padding:12px 0;border-bottom:1px solid var(--line);font-family:var(--display);font-size:1.05rem;font-weight:500}
+.chat{display:flex;flex-direction:column;gap:8px;margin:12px 0}
+.msg{max-width:88%;padding:10px 14px;border-radius:16px;white-space:pre-wrap}
+.msg.them{background:var(--surface);border:1px solid var(--line);align-self:flex-start;border-bottom-left-radius:4px}
+.msg.me{background:var(--pine);color:var(--on-pine);align-self:flex-end;border-bottom-right-radius:4px}
+.msg .who{display:block;font-size:.78rem;opacity:.75;margin-bottom:2px}
+
+/* pulse */
+.src{list-style:none;padding:0;margin:0}
+.src li{border-bottom:1px solid var(--line)}
+.src a{display:flex;justify-content:space-between;gap:10px;padding:12px 0;text-decoration:none;color:var(--ink)}
+.src a b{display:block}
+.src a span{font-size:.9rem;color:var(--muted)}
+.src .go{color:var(--pine);font-weight:700;align-self:center}
+
+/* stats */
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px}
+.stat b{font-family:var(--display);font-size:1.7rem;display:block;line-height:1.1}
+.stat span{font-size:.88rem;color:var(--muted)}
+.heat{display:grid;grid-template-columns:repeat(14,1fr);gap:4px;margin-top:10px}
+.heat i{aspect-ratio:1;border-radius:4px;background:var(--line)}
+.heat i.on{background:var(--pine)}
+.heat i.half{background:color-mix(in srgb,var(--pine) 45%,var(--line))}
+.log{list-style:none;padding:0;margin:0}
+.log li{border-bottom:1px solid var(--line);padding:10px 0}
+.log small{color:var(--muted);display:block}
+
+/* sheet */
+.scrim{position:fixed;inset:0;background:rgba(5,15,14,.45);z-index:20;display:none}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:21;background:var(--bg);border-radius:20px 20px 0 0;max-height:92%;overflow:auto;transform:translateY(105%);visibility:hidden;transition:transform .25s ease,visibility 0s linear .25s;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 18px)}
+.sheet.open{transform:none;visibility:visible;transition:transform .25s ease}
+.scrim.open{display:block}
+.sheet .grab{width:40px;height:5px;border-radius:3px;background:var(--line);margin:10px auto 6px}
+.sheet .wrap{padding-top:6px}
+.sheet .shead{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}
+.x{background:none;border:1px solid var(--line);border-radius:10px;padding:6px 10px}
+@media (prefers-reduced-motion: reduce){.sheet{transition:none}}
+.toast{position:fixed;left:50%;bottom:calc(var(--nav) + env(safe-area-inset-bottom,0px) + 14px);transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:999px;font-size:.92rem;z-index:30;opacity:0;pointer-events:none;transition:opacity .2s}
+.toast.show{opacity:1}
+
+/* v2 additions */
+.btn.onpine{background:transparent;color:var(--on-pine);border:1px solid color-mix(in srgb,var(--on-pine) 45%,transparent)}
+.seg{display:flex;gap:4px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:4px;margin:14px 0}
+.seg button{flex:1;border:0;background:none;border-radius:10px;padding:9px 6px;font-weight:700;font-size:.92rem;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--pine);color:var(--on-pine)}
+.seg small{font-weight:400;opacity:.8}
+.line.gold::before{background:var(--gold)}
+.line.gold .dot{border-color:var(--gold)}
+.line.gold .stn.complete .dot{background:var(--gold)}
+.line.gold .stn.current .dot{border-color:var(--gold)}
+.line.gold .stn .bar span{background:var(--gold)}
+.mix{display:grid;gap:10px}
+.mi{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px}
+.ml{font-size:.85rem;color:var(--muted)}
+.mq{font-family:var(--display);font-weight:700;font-size:1.12rem;margin:4px 0 8px;line-height:1.3}
+.qlist{list-style:none;padding:0;margin:12px 0 0}
+.qlist button{width:100%;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:6px;display:flex;justify-content:space-between;gap:10px;align-items:center}
+.qlist small{color:var(--muted)}
+.ok{color:var(--pine);font-weight:700;font-size:.85rem;white-space:nowrap}
+.chips.cwrap{flex-wrap:wrap;overflow:visible}
+.phr.plain li{font-family:var(--body);font-weight:400;font-size:1rem}
+.chk{margin:12px 0;border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:var(--surface)}
+.chk summary{font-weight:700;cursor:pointer}
+.chk label{display:flex;gap:8px;align-items:flex-start;margin-top:8px}
+.chk input{width:20px;height:20px;accent-color:var(--pine);flex:none;margin-top:2px}
+select.field{appearance:auto}
+.src li.hl{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:10px 0}
+.src li.hl a{display:block;padding:0}
+.src li.hl a span{display:block}
+.timer .btn{white-space:nowrap}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <div class="brand"><i aria-hidden="true"></i>Fluency Line</div>
+  <button class="streak" id="streakBtn" aria-label="Open progress"><b id="streakN">0</b> day streak</button>
+</div></header>
+<main class="wrap" id="view" tabindex="-1"></main>
+<nav class="nav" aria-label="Sections"><div class="row" id="nav"></div></nav>
+<div class="scrim" id="scrim"></div>
+<section class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle"><div class="grab"></div><div class="wrap" id="sheetBody"></div></section>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script>
+const WEEKS = [
+{t:"Map the IS world", s:"What an IS team actually does, and where you sit in it", days:[
+ {t:"Run vs change", k:["IS work splits into run (keeping apps and services alive: support, incidents, patches, licences) and change (projects that build, upgrade or retire things).","In most enterprises run consumes the larger share of the IS budget, so every new project's ongoing run cost matters as much as its build cost.","The application portfolio is the inventory of every app: business owner, users, cost, technology, support model and lifecycle status.","Support is tiered: L1 service desk logs and triages, L2 application support diagnoses, L3 developers or vendors fix the code."], ex:"List the 10 most important applications your APAC team supports. For each, note the business owner, who supports it (L2/L3, internal or vendor) and whether it has change work planned. Every blank cell is a question for this week.", say:"Most of our capacity keeps the lights on. My job is to make sure change work lands without destabilising what's already running."},
+ {t:"The software lifecycle on one page", k:["SDLC stages: requirements, design, build, test, deploy, operate. Agile teams loop through these every sprint; waterfall does them once in sequence.","Code is promoted through environments: Dev, Test/QA, UAT, Staging (pre-prod), Production. Each step adds confidence.","Testing types you'll hear: unit, integration, regression, performance, security, and UAT where the business signs off.","Definition of Done is the team's quality bar for a work item; go-live criteria are the business and operational bar for a release."], ex:"Pick one recent deployment. Trace which environments it passed through and who signed off at each stage. Where did it wait the longest, and why?", say:"Has this passed UAT with business sign-off, and what's our rollback plan if production behaves differently from staging?"},
+ {t:"Architecture vocabulary without the engineering", k:["Most apps have a front end (what users see), a back end (business logic) and a database (where data lives).","An API is a contract that lets one system ask another for data or actions. When an API changes, everything that calls it can break.","Monolith: one big deployable application. Microservices: many small services deployed independently. More flexibility, more moving parts.","Technical debt is the future cost of shortcuts taken today: old libraries, missing tests, quick fixes that became permanent."], ex:"Ask a tech lead to sketch, in five minutes, how one key app connects to others. Redraw it yourself as boxes and arrows and circle anything that would stop several systems if it failed.", say:"If this API changes, which downstream systems are affected and who owns them?"},
+ {t:"Who's who in an IS organisation", k:["CIO/CTO set direction; Heads of Applications, Infrastructure and Security (CISO) run the main towers.","Enterprise architects shape the long-term landscape; solution architects design a specific project's solution.","Product Owners own what gets built and in what order; Scrum Masters and delivery leads own how the team works; Business Analysts translate needs into requirements.","Service Delivery, Release and Vendor Managers keep operations, deployments and suppliers on track. The PMO is the connective tissue: governance, visibility, cadence and dependencies."], ex:"Place your top 15 stakeholders on a power/interest grid. Next to each, write the one metric they are judged on. Your reporting should speak to those metrics.", say:"What does a good quarter look like for you? I'd like our portfolio reporting to reflect it."},
+ {case:true, t:"Case: the first portfolio review", k:["The regional IS head asks you to present the state of the APAC portfolio in two weeks.","You have a spreadsheet of 40 projects. Status fields are inconsistent: some RAG, some percentages, some blank. Two countries report differently from the rest."], ex:"Answer three questions. Which five data fields do you standardise first, and why? Who do you interview first, and what three questions do you ask them? How do you present uncertainty honestly without looking unprepared?", say:"Here's what we know with confidence, here's what we're still validating, and here's the date it will be clean."}
+]},
+{t:"Delivery methods", s:"Waterfall, agile, flow and scaling, and what each means for a PMO", days:[
+ {t:"Waterfall vs agile: when each fits", k:["Waterfall: fixed scope, sequential phases, heavy upfront planning. Fits regulated, infrastructure or hardware-dependent work.","Agile: value delivered in small increments, with time and cost fixed and scope flexing.","Most enterprises run hybrids, often agile build inside waterfall governance ('water-scrum-fall').","The iron triangle still applies: scope, time and cost can't all be fixed. Agile simply chooses which one flexes."], ex:"Classify five of your projects by the method they claim to use and the method they actually use. Where they differ, note what that does to reporting.", say:"In agile we fix time and cost and let scope flex, so the real question is which features drop if we hold the date."},
+ {t:"Scrum mechanics", k:["Roles: Product Owner (what and why), Scrum Master (process and blockers), Developers (how).","Events: sprint planning, daily scrum, sprint review (demo to stakeholders), retrospective (improve the process).","Story points estimate relative effort. Velocity is points completed per sprint. It is team-specific and should never be compared across teams.","Burndown shows remaining work in a sprint; carry-over (unfinished work rolled forward) is often the most honest signal of trouble."], ex:"Attend one sprint review this week. Note what was demoed, what carried over, and the reasons given. Compare with the last two sprints.", say:"Velocity is stable, but carry-over has grown three sprints running. What's blocking the team?"},
+ {t:"Kanban and flow", k:["Kanban visualises work on a board and limits work in progress (WIP).","Lead time: request to delivery, as the customer feels it. Cycle time: work started to delivered. Throughput: items finished per week.","Little's Law in plain words: more work in progress means longer waits for everything.","Kanban suits support and BAU teams where work arrives unpredictably; a cumulative flow diagram shows where work piles up."], ex:"For your support or enhancement team, estimate average lead time for a change request and current WIP. What would happen if WIP were halved?", say:"We may not need more people yet. We need fewer things in progress at once."},
+ {t:"Scaling agile: SAFe and friends", k:["SAFe organises teams into Agile Release Trains that plan together every Program Increment (PI), typically 8 to 12 weeks.","Key roles: Release Train Engineer (chief Scrum Master of the train), Product Management, Business Owners. Work flows as epics, features and stories.","Alternatives include LeSS and Scrum@Scale. The 'Spotify model' (squads, tribes) is often copied without the culture that made it work.","At scale, the PMO's job shifts from tracking tasks to managing flow, dependencies and funding for value streams (Lean Portfolio Management)."], ex:"Draw next quarter's dependency map for your teams: who must deliver something to whom, by when? Mark the three riskiest handoffs.", say:"Let's surface cross-team dependencies at planning, not in week six."},
+ {case:true, t:"Case: ninety per cent complete", k:["A vendor team has reported '90% complete' on a fixed-scope project for six weeks running.","Meanwhile the business wants to change requirements mid-way, agile-style, without reopening the contract."], ex:"What evidence would you ask for instead of percentage complete? How do you handle change requests under a fixed-price contract? What do you tell the steering committee this week?", say:"Instead of percent complete, can we see working software and the list of what's left, item by item?"}
+]},
+{t:"Service management and ITIL 4", s:"How IS keeps services healthy and how that's measured", days:[
+ {t:"Incident, problem, change, request", k:["Incident: an unplanned interruption or degradation. Goal: restore service fast.","Problem: the underlying cause of one or more incidents. Goal: root cause analysis and a permanent fix; a known error has a documented workaround.","Change: a controlled modification to a service, classed as standard (pre-approved), normal (assessed) or emergency.","Service request: a routine ask such as access, software or a laptop, fulfilled through a catalogue."], ex:"Pull last month's top incident categories from your ITSM tool. Which clusters look like one underlying problem that nobody has opened a problem record for?", say:"We've closed these incidents, but is there a problem record open for the root cause?"},
+ {t:"SLAs, OLAs and watermelons", k:["SLA: commitment to the customer, such as restoring a P1 within four hours. OLA: internal team commitments that make the SLA possible. Underpinning contracts cover vendors.","Priority usually equals impact multiplied by urgency, mapped to P1 to P4.","Watermelon metrics are green outside and red inside: SLAs met while users are unhappy.","Experience level agreements (XLAs) add user-perceived measures such as satisfaction and lost productivity."], ex:"Find one SLA your team reports as green that users still complain about. What is the SLA measuring, and what is it missing?", say:"Our SLA is green but the experience isn't. I'd like to add a user-side measure next to it."},
+ {t:"Change enablement and the CAB", k:["The Change Advisory Board reviews risky changes; the change calendar shows what is going live when.","Change freezes protect business peaks such as month-end close, audits and major holidays.","Standard changes are low-risk, repeatable and pre-approved, so they skip the CAB.","ITIL 4 renamed change management to change enablement: the aim is speed with safety, increasingly through automated checks in pipelines rather than meetings."], ex:"Look at next month's change calendar across APAC. Spot clashes with business peaks and local public holidays in each country.", say:"This change happens every month without incident. Can we make it a standard change so it doesn't need CAB each time?"},
+ {t:"ITIL 4 big picture and tools", k:["ITIL 4 frames IT as a service value system made of value streams and practices, not a set of rigid processes.","Seven guiding principles: focus on value; start where you are; progress iteratively with feedback; collaborate and promote visibility; think and work holistically; keep it simple and practical; optimise and automate.","Major incidents get a dedicated manager, a communication cadence and a blameless post-incident review.","Common ITSM tools: ServiceNow, Jira Service Management, BMC Helix, Freshservice."], ex:"Which guiding principle is your team weakest at? Write one concrete change you could sponsor this month.", say:"Let's run a blameless review. The goal is to fix the system, not find a person."},
+ {case:true, t:"Case: P1 at 9am Singapore", k:["The main customer-facing application goes down at 9am Singapore time.","Sydney is heading into the afternoon, India is just logging in, and the vendor's L3 team is in another time zone."], ex:"Who leads the incident and who communicates? What goes in the first stakeholder message, and how often do you update? What do you insist on once service is restored?", say:"Next update in 30 minutes, even if the update is that we're still investigating."}
+]},
+{t:"Cloud and infrastructure", s:"Enough cloud fluency to follow any architecture or outage conversation", days:[
+ {t:"IaaS, PaaS, SaaS and shared responsibility", k:["IaaS: you rent virtual machines and manage everything above them. PaaS: the provider runs the platform, you bring code. SaaS: you use the finished application.","Main providers: Microsoft Azure, AWS and Google Cloud, plus SaaS platforms such as Microsoft 365, Salesforce and ServiceNow.","Shared responsibility: the provider secures the cloud; you secure what you put in it (data, identities, configuration).","Moving up the stack means less control and less effort: you swap operations work for vendor and configuration management."], ex:"Classify 10 of your applications as on-premises, IaaS, PaaS or SaaS. Which ones cause the most support effort, and does the hosting model explain it?", say:"Moving to SaaS shifts us from running software to managing a vendor and its configuration."},
+ {t:"Regions, resilience and recovery", k:["Cloud regions are geographic locations; availability zones are separate data centres within a region. APAC regions include Singapore, Sydney, Tokyo, Mumbai and others.","High availability keeps a service running through component failures. Disaster recovery restores it after a major event.","RTO (recovery time objective): how quickly service must be back. RPO (recovery point objective): how much data loss is acceptable, measured in time.","Untested DR plans are assumptions, not capabilities."], ex:"For your top three applications, find the documented RTO and RPO and the date DR was last tested. Note any that are missing.", say:"What's the RTO and RPO for this, and when did we last test a failover?"},
+ {t:"Cloud migration: the Rs", k:["Rehost (lift and shift), Replatform (small optimisations), Refactor (re-architect), Repurchase (move to SaaS), Retire, Retain, Relocate.","A landing zone is the pre-built, governed cloud foundation (accounts, network, security, policies) that applications move into.","Migrations run in waves, grouping applications that depend on each other.","Classic cost surprises: data egress charges, idle resources left running, and lifting inefficient systems without optimising them."], ex:"Pick five legacy applications and propose an R for each, with a one-line reason. Which one would you challenge the business to retire?", say:"Before we lift and shift this, are we sure it shouldn't simply be retired?"},
+ {t:"Identity, networks and end-user basics", k:["Identity is the new perimeter: single sign-on (SSO), Microsoft Entra ID (formerly Azure AD) or Okta, multi-factor authentication, role-based access.","Joiner-mover-leaver processes decide how fast people get, change and lose access.","Network words you'll hear in outages: VPN, SD-WAN, firewall, DNS, latency.","End-user computing covers laptops, Microsoft 365 and device management such as Intune."], ex:"Find out how long a new joiner in one APAC country waits to get full application access. Map the steps and the handoffs.", say:"Is this an access issue, a network issue or the application itself? Let's isolate it before we escalate."},
+ {case:true, t:"Case: one app, eight countries, one regulator", k:["The business wants to move an on-premises application used in eight APAC countries to the cloud.","One country's regulator requires certain data to be stored locally. The vendor's preferred cloud region is Singapore."], ex:"What do you ask architecture and legal? Lay out at least three options (for example a local deployment, data partitioning, keeping one country on-premises) and how you'd present the trade-offs on one slide.", say:"Here are three options, what each costs, and what each means for compliance and support."}
+]},
+{t:"DevOps and release", s:"How code gets from a developer's laptop to production safely", days:[
+ {t:"CI/CD explained", k:["Version control (Git) tracks every change; developers work in branches and propose changes through pull requests that others review.","Continuous integration: every change is automatically built and tested.","Continuous delivery: every change is ready to deploy, with a human approval. Continuous deployment: changes go to production automatically.","Pipelines run in tools such as GitHub Actions, Azure DevOps, GitLab or Jenkins."], ex:"Ask a developer to walk you through one pipeline run. Note each stage, how long it takes, and which steps are still manual.", say:"Which step in the pipeline is still manual, and what would it take to automate it?"},
+ {t:"DORA metrics", k:["Four research-backed measures of delivery performance: deployment frequency, lead time for changes, change failure rate, and time to restore service.","High performers deploy often, with short lead times, few failures and fast recovery. Speed and stability improve together.","Use them to help a team improve over time, not to rank teams against each other.","They are far better signals than hours logged or lines of code."], ex:"Estimate the four DORA metrics for one team, even roughly. Which is weakest, and what would move it?", say:"I'd rather track lead time and change failure rate than hours logged."},
+ {t:"Release strategies", k:["Big bang releases everything at once; phased rollouts go country by country or user group by user group.","Blue-green runs two identical environments and switches traffic; canary releases to a small percentage first; feature flags switch functionality on and off without redeploying.","Rollback reverts to the previous version; roll-forward fixes and redeploys.","A go/no-go meeting checks readiness; hypercare is the period of heightened support after go-live."], ex:"Draft a ten-item go/no-go checklist for your next release, covering testing, data, support readiness, communications and rollback.", say:"Can we release behind a feature flag to one country first, then expand?"},
+ {t:"Quality, technical debt and observability", k:["The test automation pyramid: many fast unit tests, fewer integration tests, few slow end-to-end tests.","Technical debt grows quietly; many teams reserve a fixed share of each sprint to pay it down.","Code quality tools such as SonarQube flag risky code and security issues.","Observability means understanding a system from its logs, metrics and traces, using tools such as Datadog, Dynatrace or Azure Monitor."], ex:"Ask two tech leads which technical debt worries them most. Turn each answer into a risk entry with business impact and an owner.", say:"If we don't pay this debt down, what's the business risk in twelve months?"},
+ {case:true, t:"Case: one release in three fails", k:["A third of releases in the last quarter needed a rollback or an urgent fix.","Developers blame slow testing; testers blame late code drops; the business has stopped trusting go-live dates."], ex:"What data do you collect first? Which three interventions would you propose? How would you show improvement over the next quarter?", say:"Let's agree on the data first, then the fix. Here's what the last twelve releases tell us."}
+]},
+{t:"Enterprise apps and integration", s:"ERP, CRM, integrations, data migration and the app estate", days:[
+ {t:"ERP and CRM fundamentals", k:["ERP runs finance, procurement and supply chain: SAP S/4HANA, Oracle Fusion, Microsoft Dynamics 365.","CRM runs sales and customer service: Salesforce, Dynamics 365 Customer Engagement.","SAP's mainstream maintenance for ECC ends in 2027, which is driving many S/4HANA programmes.","Fit-to-standard and 'clean core' mean adopting standard processes and keeping customisation outside the core, so upgrades stay cheap."], ex:"Identify the system of record for customer, employee, supplier and finance data in your organisation. Note any data that has two competing sources.", say:"Are we configuring the standard process or customising it, and who carries the upgrade cost later?"},
+ {t:"APIs and integration", k:["Most modern integrations use REST APIs exchanging JSON; webhooks push notifications when something changes.","Point-to-point integrations multiply fast; middleware and iPaaS (MuleSoft, Boomi, Azure Integration Services) centralise them.","Batch integrations move data on a schedule; real-time and event-driven ones (Kafka, event grids) move it as it happens.","Integration testing is where projects slip most often, usually waiting on another team's test environment or data."], ex:"For one active project, list every integration and its status: designed, built, tested end to end. Mark which depend on another team.", say:"Do we have test data and access to the other system's test environment, or is that our critical path?"},
+ {t:"Master data and data migration", k:["Master data is the core shared data: customers, suppliers, materials, employees, chart of accounts.","Data migration runs in cycles of mock loads with reconciliation each time, improving quality before the real cutover.","Cleansing and ownership decisions take longer than the technical load itself.","A cutover plan is an hour-by-hour runbook from freeze to go-live, with go/no-go points and a rollback route."], ex:"Draft a cutover plan skeleton running from T-30 days to T+5 days: freezes, mock loads, sign-offs, communications, hypercare.", say:"How many mock migrations have we run, and what did the last reconciliation show?"},
+ {t:"Low-code, SaaS sprawl and rationalisation", k:["Low-code platforms such as Power Platform let business users build apps quickly; without governance this becomes shadow IT.","SaaS sprawl means duplicate tools, unused licences and data scattered across vendors.","Gartner's TIME model sorts applications into Tolerate, Invest, Migrate or Eliminate.","Application rationalisation frees budget and reduces risk, but needs business owners to agree to give things up."], ex:"Apply TIME to ten applications in your region. Which two are the strongest candidates to eliminate, and who would need to agree?", say:"Three apps do roughly the same job across APAC. That's a rationalisation opportunity worth a business case."}
+ ,{case:true, t:"Case: a country wants its own CRM", k:["A country business head wants a local CRM because the global platform is 'too slow to change'.","They have budget and a vendor ready to start next month."], ex:"What are the arguments for and against? What questions do you ask first? What governance mechanism (for example an architecture review board) should decide, and what compromise could you offer?", say:"Let's fix the speed problem rather than create a second platform. Here's what a faster change lane could look like."}
+]},
+{t:"Data and analytics", s:"Where numbers come from, who owns them, and the road to AI", days:[
+ {t:"Data architecture vocabulary", k:["Transactional systems (OLTP) run the business; analytical systems (OLAP) report on it.","Data warehouse: structured, modelled data for reporting. Data lake: raw data of any kind. Lakehouse: both in one platform.","ETL transforms data before loading; ELT loads first and transforms in the platform.","Common platforms: Microsoft Fabric, Snowflake, Databricks, Google BigQuery; BI tools: Power BI, Tableau."], ex:"Trace one KPI on a leadership dashboard from source system through pipeline and data model to the report. Note how fresh it is.", say:"Which system is the source of truth for this number, and how fresh is it?"},
+ {t:"Data governance and quality", k:["A data owner is accountable for a data domain; a data steward manages its definitions and quality day to day.","A data catalogue lists what data exists; lineage shows where it came from and how it changed.","Quality dimensions: accuracy, completeness, timeliness, consistency, validity, uniqueness.","Data classification (public, internal, confidential, restricted) drives security and AI usage rules."], ex:"Pick a report people distrust. Which quality dimension is failing, and who owns fixing it?", say:"Before we build the dashboard, who owns the definition of this metric?"},
+ {t:"PMO reporting people actually use", k:["Build one portfolio dataset, fed automatically from Jira, Azure DevOps or ServiceNow, instead of chasing spreadsheets.","Leading indicators predict (scope growth, carry-over, open risks); lagging indicators confirm (milestones missed, budget variance).","RAG must have written criteria, so amber means the same thing in every country.","Trends beat snapshots; one page for executives beats ten."], ex:"Redesign your portfolio status view: at most five fields per project, a trend arrow and one decision needed.", say:"I'd like RAG to be rule-based, so amber means the same thing in Sydney as in Singapore."},
+ {t:"Analytics maturity and the path to AI", k:["Maturity runs descriptive (what happened), diagnostic (why), predictive (what will happen), prescriptive (what to do).","Machine learning models learn patterns from historical data; they are only as good as that data.","MLOps applies DevOps discipline to models: versioning, monitoring and retraining.","In most enterprises, data quality is the real bottleneck for AI, not the algorithms."], ex:"Identify one predictive use case for your PMO, such as forecasting project slippage. List the data it would need and whether you have it.", say:"AI won't fix this until the underlying data is consistent."},
+ {case:true, t:"Case: two numbers, one meeting", k:["The APAC leadership dashboard shows a different IS cost figure from Finance's report.","The CFO noticed in a meeting and asked which one is right."], ex:"How do you diagnose the gap? Who do you involve? What do you put in place so it doesn't happen again?", say:"Both numbers are right for different definitions. Here's the reconciliation, and here's the one definition I propose we use."}
+]},
+{t:"Security and compliance", s:"Security language, audits and APAC data rules", days:[
+ {t:"Security fundamentals", k:["The CIA triad: confidentiality, integrity, availability.","Common threats: phishing, ransomware, stolen credentials, and supply-chain attacks through vendors and software libraries.","Vulnerability (a weakness), threat (who might exploit it), risk (likelihood times impact). CVEs identify known vulnerabilities; CVSS scores their severity.","Patch SLAs set how quickly critical vulnerabilities must be fixed, often days, not months."], ex:"Find your organisation's patch SLA for critical vulnerabilities and how your applications are performing against it.", say:"What's our exposure if this critical patch waits until the next release window?"},
+ {t:"Identity and zero trust", k:["Least privilege: people get only the access they need, for as long as they need it.","Privileged access management (PAM) controls and records administrator access.","Zero trust: never trust, always verify, regardless of network location.","Segregation of duties stops one person controlling a full process end to end, which is critical in ERP and finance systems."], ex:"When was the last access review for one key application? Ask how many orphaned or excessive accounts it found.", say:"Who has admin access to this, and when did we last review it?"},
+ {t:"Standards and audits", k:["ISO/IEC 27001 certifies an information security management system. SOC 2 reports on a service provider's controls; Type II tests them over a period.","NIST CSF 2.0 and CIS Controls are widely used frameworks for organising security work.","IT general controls (ITGCs) over access, change and operations are tested in financial audits.","Third-party risk management assesses vendors before and during contracts."], ex:"List the certifications your top five vendors hold. Which ones lack evidence, and when are their reviews due?", say:"Has security reviewed this vendor, and do we have their SOC 2 Type II report?"},
+ {t:"APAC privacy and data laws", k:["Key laws: India's DPDP Act 2023 (with implementing rules phasing in), Singapore's PDPA, Australia's Privacy Act and Notifiable Data Breaches scheme, China's PIPL, Japan's APPI, Korea's PIPA. GDPR applies when EU personal data is involved.","Common themes: lawful basis or consent, purpose limitation, breach notification deadlines, and conditions on cross-border transfers.","Some regimes add data localisation for certain data types or sectors.","These rules change often. Your job is to ask the right question early and route it to privacy and legal, not to interpret the law yourself."], ex:"For one application that processes personal data in three or more APAC countries, find where the data is stored and whether it crosses borders.", say:"Has privacy reviewed the cross-border flow for this data under each country's rules?"},
+ {case:true, t:"Case: the vendor's bad news", k:["A key vendor emails to say they've had a security incident that may have involved your data.","Details are vague and the email arrived on a Friday evening."], ex:"What do you do in the first 24 hours? Who do you notify internally? What do you check in the contract? How do you communicate with the business without causing panic?", say:"We've been notified, security and legal are engaged, and we'll confirm impact by a specific time."}
+]},
+{t:"AI and automation", s:"Talk about AI credibly, evaluate use cases and govern them", days:[
+ {t:"Generative AI fundamentals", k:["Large language models generate text by predicting likely next words; they work in tokens and have a limited context window.","Hallucination: confident output that is wrong. Grounding reduces it.","RAG (retrieval-augmented generation) grounds answers in your own documents; fine-tuning adapts a model with extra training.","Agents use tools to take actions; copilots assist inside existing products such as Microsoft 365 or GitHub."], ex:"Use an AI assistant to draft one status report from your notes. List what it got wrong and what context it would have needed.", say:"Is this answer grounded in our documents, or is the model generating from general knowledge?"},
+ {t:"Evaluating an AI use case", k:["Score value (time saved, quality, revenue), feasibility (data, integration, skills), risk (accuracy, privacy, IP) and cost (licences, usage, run cost).","Define the baseline and success metrics before the pilot starts.","Keep a human in the loop where errors are costly.","Most AI pilots stall at scaling, usually on data, integration, change management or unclear ownership."], ex:"Score three AI ideas from your team from 1 to 5 on value, feasibility and risk. Which one would you pilot first?", say:"What's the baseline today, so we can prove the pilot actually moved it?"},
+ {t:"AI governance", k:["The EU AI Act sorts systems by risk tier, with obligations phasing in over several years.","ISO/IEC 42001 certifies an AI management system; NIST's AI Risk Management Framework is widely referenced.","In APAC, Singapore's Model AI Governance Framework is a common reference point, and other countries are issuing guidelines.","Acceptable-use policies define which tools are approved and which data classifications may go into them."], ex:"Find your organisation's AI acceptable-use policy. Summarise in three lines what it allows and what it forbids.", say:"Which data classification is allowed into this AI tool?"},
+ {t:"Automation beyond AI", k:["RPA (UiPath, Power Automate) mimics clicks and keystrokes; workflow automation connects systems through APIs.","AIOps correlates alerts and can trigger automated fixes in operations.","ITSM automation includes virtual agents, auto-routing of tickets and self-service.","Every automation needs an owner and a maintenance budget; brittle bots fail when screens change."], ex:"List five repetitive tasks in your PMO week. Which could be automated with tools you already have?", say:"Automation saves time only if someone owns maintaining it."},
+ {case:true, t:"Case: what are we doing with AI?", k:["The regional leadership team asks, 'What is APAC IS doing with AI?'","You have one week. Several teams are experimenting informally."], ex:"How do you build the inventory? What goes on a single slide? How do you show momentum without overpromising?", say:"Here are the pilots, what each has proved so far, and the two we recommend scaling."}
+]},
+{t:"Money and vendors", s:"Your finance strength, translated into IS language", days:[
+ {t:"IT finance basics", k:["CapEx buys assets that are depreciated or amortised over years; OpEx is spent as incurred. Cloud and SaaS shift spend towards OpEx.","Some software development can be capitalised; the rules depend on accounting standards and company policy.","Total cost of ownership includes licences, infrastructure, support, upgrades, people and exit costs.","A project's run cost lands in someone's budget for years after go-live."], ex:"For one project, estimate five-year total cost of ownership, including run costs after go-live. Whose budget absorbs year two onwards?", say:"What's the run cost once this goes live, and whose budget absorbs it?"},
+ {t:"FinOps and licensing", k:["FinOps is the practice of managing cloud spend collaboratively: inform, optimise, operate.","Tagging resources makes showback (showing cost) and chargeback (billing cost) possible.","Savings levers: rightsizing, shutting down idle resources, reserved instances and savings plans.","Licensing models: per user, per core, consumption, enterprise agreements. Watch for true-ups and vendor audits."], ex:"Find the top three cloud or licence cost drivers in your area. Which one has the most obvious saving?", say:"Is our tagging good enough to show back cloud cost by business unit?"},
+ {t:"Contracts: MSA, SOW, SLA", k:["The MSA sets legal terms for the whole relationship; each SOW defines specific work, deliverables and acceptance criteria; change orders amend scope.","Commercial models: time and materials, fixed price, outcome-based.","Service credits compensate for SLA breaches but rarely cover the real business impact.","Exit clauses, knowledge transfer and key-person clauses protect you when things go wrong."], ex:"Read one active SOW. List its acceptance criteria, penalties and exit terms. Is anything vague enough to cause a dispute?", say:"What are the acceptance criteria in the SOW, and who signs them off?"},
+ {t:"Vendor governance and performance", k:["Tier vendors by spend and criticality; govern each tier differently.","Quarterly business reviews should look at trends and improvement plans, not argue over individual tickets.","SIAM (service integration and management) coordinates multiple vendors as one service.","Your bid management experience is an asset: you know how vendors price, so you know where to probe."], ex:"Create a six-metric scorecard for your main support vendor, mixing SLA, quality, responsiveness and innovation.", say:"Let's review the scorecard trend in the QBR rather than individual incidents."},
+ {case:true, t:"Case: a 15% cut mid-plan", k:["Next year's IS budget for APAC is cut by 15% midway through planning.","Twelve projects are in flight and three new ones were about to be approved."], ex:"What prioritisation framework do you use? What do you protect and why? How do you communicate the outcome to project sponsors?", say:"Here's what we stop, what we slow, and what we protect, and the business impact of each."}
+]},
+{t:"Portfolio governance", s:"The core PMO craft: prioritise, control, report, realise value", days:[
+ {t:"Portfolio prioritisation", k:["A single intake process stops work sneaking in through side doors.","Score requests on strategic fit, value, risk and effort; SAFe's WSJF divides cost of delay by job size.","Plan against real capacity, not wishful headcount.","Prioritisation means agreeing what not to do."], ex:"Score your current pipeline with a simple four-criteria model. Does the ranking match what teams are actually working on?", say:"If this comes in, what comes out? Capacity is fixed this quarter."},
+ {t:"RAID, dependencies and escalation", k:["RAID logs track risks, assumptions, issues and dependencies.","A risk might happen; an issue already has. Risk exposure is roughly probability times impact.","Every item needs an owner, an action and a date, or it's just a list of worries.","Tolerances define when something escalates and to whom."], ex:"Clean up one project's RAID log: close stale items, add owners and dates, and flag anything past tolerance.", say:"This risk has been amber for six weeks with no action. It needs an owner and a date, or we formally accept it."},
+ {t:"Status reporting and steering committees", k:["Lead with the bottom line (BLUF): status, trend and the decision needed.","Pre-wire key stakeholders so the meeting confirms decisions rather than surprising people.","Design steering committees around decisions, not status readouts.","Minutes record decisions, actions, owners and dates. Nothing else matters as much."], ex:"Rewrite your last status update in BLUF format: three lines plus one decision needed.", say:"There's one decision I need from this group today."},
+ {t:"Benefits realisation and PMO value", k:["Define benefits up front, with an owner and a measurement plan that continues after go-live.","OKRs link portfolio work to outcomes rather than outputs.","PMOs range from supportive to controlling to directive; mature ones act as value delivery offices.","Tools you'll hear: Jira Align, ServiceNow SPM, Planview, Smartsheet, Microsoft Project and Planner."], ex:"For one completed project, check whether its business case benefits were ever measured. If not, what would it take now?", say:"Who owns this benefit after go-live, and when do we measure it?"},
+ {case:true, t:"Case: the empty steering committee", k:["Steering committee meetings have become status-reading sessions.","Executives send delegates or skip them entirely, and decisions are made in corridors instead."], ex:"Redesign the forum: purpose, attendees, pre-reads, agenda, length and how decisions are recorded. What do you stop doing?", say:"From next month, this forum is for decisions only. Status goes in the pre-read."}
+]},
+{t:"Leading across APAC", s:"Culture, influence, change and your next career step", days:[
+ {t:"Culture and communication across APAC", k:["High-context cultures rely on implicit meaning and relationships; low-context cultures spell things out. Erin Meyer's Culture Map is a practical guide.","Feedback directness and comfort with disagreeing upward vary widely across Australia, India, Singapore, Japan, China and South-East Asia.","Silence on a call rarely means agreement. Confirm in writing.","Rotate meeting times so the same country isn't always on at the edge of the day."], ex:"For each country in your remit, note the best overlap window and who may not speak up on calls. How will you hear from them?", say:"Let me summarise what I heard and send it in writing. Please correct anything I've got wrong."},
+ {t:"Influence without authority", k:["Map stakeholders by power and interest, and know what each is measured on.","Frame requests in their goals, not yours.","Pre-wire important decisions one to one before the group meeting.","Combine data with a short story; escalate only when it serves the outcome."], ex:"Pick one stakeholder who resists you. Write down what they gain from saying yes and what they fear losing.", say:"What would need to be true for you to support this?"},
+ {t:"Change management", k:["ADKAR: Awareness, Desire, Knowledge, Ability, Reinforcement. Adoption stalls at the weakest stage.","Kotter's eight steps start with urgency and a guiding coalition.","Change champions in each country carry the message in local context.","Adoption is the real go-live: track usage at 30, 60 and 90 days."], ex:"Rate one recent rollout on each ADKAR stage. Where is it stuck, and what single action would unblock it?", say:"Adoption is our real go-live. Let's track usage at 30, 60 and 90 days."},
+ {t:"Your career architecture", k:["Credentials worth weighing: PMP now, PgMP later; ITIL 4 Foundation; a SAFe certification; cloud fundamentals such as Azure AZ-900 or AWS Cloud Practitioner; PMI-CPMAI for AI projects.","Visible wins matter more than certificates: a measurable process improvement, a portfolio insight that changed a decision.","Next roles to aim at: Head of PMO, Portfolio Director, IT Business Partner, Head of Digital Delivery.","Your edge is rare: engineering, finance and M&A thinking applied to technology delivery."], ex:"Write an 18-month plan: one certification, two visible wins, three relationships to build.", say:"Here's what our portfolio delivered this quarter, and here's what I'd change next quarter."},
+ {case:true, t:"Case: the skip-level question", k:["In a skip-level conversation, your manager's manager asks: 'Where do you want to be in three years, and what's your plan?'"], ex:"Prepare a two-minute answer: where you want to be, why you're credible for it, what you're doing now, and what support you'd ask for.", say:"In three years I want to lead portfolio delivery across APAC. Here's the evidence I'm building towards it."}
+]}
+];
+
+const CARDS = [
+[1,"Application portfolio","The full inventory of applications: owner, users, cost, technology, support model and lifecycle status.","Your map for prioritisation, rationalisation and risk. If it's out of date, so is every decision built on it."],
+[1,"Run vs change","Run keeps existing services working; change builds, upgrades or retires them.","Every change project creates future run cost. Ask for it before approval."],
+[1,"L1 / L2 / L3 support","L1 service desk triages, L2 application support diagnoses, L3 developers or vendors fix code.","Slow resolutions usually hide in the handoffs between tiers."],
+[1,"UAT","User acceptance testing: the business confirms the solution works for real tasks before go-live.","No business sign-off on UAT means no go-live."],
+[1,"Production","The live environment real users depend on.","Anything touching production needs a change record and a rollback plan."],
+[1,"Technical debt","The future cost of shortcuts taken today.","Treat it as a risk with a business impact, not as an engineering complaint."],
+[1,"API","A contract that lets one system request data or actions from another.","API changes ripple to every consuming system; ask who is downstream."],
+[1,"Microservices","An architecture of many small, independently deployed services instead of one large application.","More release flexibility, but more dependencies and monitoring to manage."],
+[2,"Sprint","A fixed timebox, usually two weeks, in which a team delivers a usable increment.","Plan and report in sprint cadence; mid-sprint scope changes are disruptive."],
+[2,"Product Owner","The person accountable for what the team builds and in what order.","Your key partner for scope and priority trade-offs."],
+[2,"Velocity","Story points a team completes per sprint.","Useful for one team's forecasting. Never compare velocity across teams."],
+[2,"Story points","A relative estimate of effort and complexity, not hours.","Don't convert them to days in reports; use them for trends."],
+[2,"Backlog refinement","Ongoing work to clarify, split and estimate upcoming backlog items.","A thin refined backlog predicts a messy next sprint."],
+[2,"WIP limit","A cap on how many items can be in progress at once.","Lower WIP usually shortens delivery time more than adding people."],
+[2,"Lead time","Time from a request being made to it being delivered.","The number the business actually feels. Track its trend."],
+[2,"PI Planning","SAFe's event where all teams on a release train plan the next 8 to 12 weeks together.","The best moment to surface and commit on cross-team dependencies."],
+[3,"Incident","An unplanned interruption or degradation of a service.","Measure time to restore and how well you communicated."],
+[3,"Problem","The underlying cause of one or more incidents.","Recurring incidents without a problem record are a governance gap."],
+[3,"Standard change","A low-risk, repeatable change that is pre-approved.","Moving routine changes to standard frees the CAB for real risk."],
+[3,"CAB","Change Advisory Board: reviews and approves higher-risk changes.","Bring a clear risk, impact and rollback summary, or expect delay."],
+[3,"SLA","Service level agreement: a committed service target to the customer.","Check what it measures, not just whether it's green."],
+[3,"OLA","Operational level agreement: internal commitments between teams that support an SLA.","When an SLA fails, look for the OLA that broke first."],
+[3,"Watermelon metric","A measure that looks green while users experience red.","Pair SLAs with user-side measures such as satisfaction or repeat contacts."],
+[3,"Post-incident review","A blameless analysis after a major incident to prevent recurrence.","Insist on actions with owners and dates, then track them."],
+[4,"SaaS","Software as a service: you use a vendor-run application over the internet.","Less to run, more to govern: configuration, access, data and the vendor."],
+[4,"IaaS","Infrastructure as a service: rented virtual machines, storage and networks.","You still own patching, security and operations above the infrastructure."],
+[4,"PaaS","Platform as a service: the provider runs the runtime; you bring the code.","Faster delivery, with some lock-in to the provider's platform."],
+[4,"Availability zone","A separate data centre within a cloud region.","Running across zones protects against a single site failure."],
+[4,"RTO","Recovery time objective: how quickly a service must be restored.","Ask for it and when it was last tested."],
+[4,"RPO","Recovery point objective: how much data loss is acceptable, measured in time.","An RPO of four hours means up to four hours of transactions could be lost."],
+[4,"Lift and shift","Rehosting an application in the cloud with minimal changes.","Fast, but often expensive to run unless optimised afterwards."],
+[4,"Landing zone","A pre-built, governed cloud foundation that applications are deployed into.","No landing zone usually means every migration reinvents security and networking."],
+[4,"SSO","Single sign-on: one login gives access to many applications.","Better security and fewer access tickets. Ask whether new apps support it."],
+[5,"CI/CD","Continuous integration and delivery: automated build, test and release pipelines.","More automation means smaller, safer, more frequent releases."],
+[5,"Pull request","A proposed code change that others review before it's merged.","Long-waiting pull requests are a hidden delay in delivery."],
+[5,"Feature flag","A switch that turns functionality on or off without redeploying.","Lets you release to one country or user group first."],
+[5,"Canary release","Releasing to a small share of users first, then expanding.","Limits the blast radius of a bad release."],
+[5,"Blue-green deployment","Two identical environments; traffic switches from old to new.","Near-instant rollback by switching back."],
+[5,"Rollback","Reverting to the previous working version.","Every go/no-go should confirm the rollback was tested."],
+[5,"DORA metrics","Deployment frequency, lead time for changes, change failure rate, time to restore.","Better delivery health signals than hours or task counts."],
+[5,"Observability","Understanding a system's behaviour from its logs, metrics and traces.","Weak observability means slow diagnosis in every incident."],
+[5,"Hypercare","A period of heightened support straight after go-live.","Agree its length, exit criteria and handover to BAU support up front."],
+[6,"ERP","Enterprise resource planning: the core system for finance, procurement and supply chain.","ERP programmes are multi-year and touch every function; governance is everything."],
+[6,"CRM","Customer relationship management: systems for sales, service and customer data.","Ask who owns customer master data across CRM and ERP."],
+[6,"System of record","The authoritative source for a type of data.","Two systems of record for one data type guarantees reconciliation pain."],
+[6,"iPaaS","Integration platform as a service, such as MuleSoft or Boomi.","Centralises integrations; check who owns and supports it."],
+[6,"Master data","Shared core data: customers, suppliers, materials, employees, accounts.","Poor master data quietly breaks reports, integrations and AI."],
+[6,"Cutover","The planned switch from old system to new, run hour by hour.","Needs a runbook, go/no-go points and a rollback route."],
+[6,"Clean core","Keeping an ERP close to standard, with extensions built outside it.","Cheaper, faster upgrades. Challenge every core customisation."],
+[6,"TIME model","Tolerate, Invest, Migrate, Eliminate: a way to classify applications.","A simple lens for rationalisation conversations with business owners."],
+[7,"Data warehouse","A structured, modelled store of data optimised for reporting.","Where most trusted management reporting should come from."],
+[7,"Data lake","A store of raw data in many formats.","Without governance it becomes a data swamp."],
+[7,"Lakehouse","A platform combining data lake flexibility with warehouse structure.","Common in Databricks and Microsoft Fabric conversations."],
+[7,"ETL / ELT","Extract, transform, load (or load, then transform): how data moves into analytics platforms.","Pipeline failures are why dashboards go stale."],
+[7,"Data lineage","The trail showing where data came from and how it changed.","The fastest way to settle 'why don't these numbers match?'"],
+[7,"Data steward","The person managing definitions and quality for a data domain.","Find them before arguing about a metric."],
+[7,"Semantic layer","A shared layer of business definitions over the data, such as what 'active user' means.","One definition, used by every report."],
+[7,"Leading indicator","A measure that predicts future results.","Carry-over, scope growth and open risks warn you before milestones slip."],
+[8,"CIA triad","Confidentiality, integrity and availability: the three goals of information security.","A quick way to frame any security risk conversation."],
+[8,"Zero trust","Never trust, always verify: every access request is checked, wherever it comes from.","Expect stronger identity checks and segmentation in new projects."],
+[8,"MFA","Multi-factor authentication: a second proof of identity beyond the password.","Should be standard for every application, especially admin access."],
+[8,"Least privilege","Giving people only the access they need, for as long as they need it.","Ask how access is granted and removed, not just who has it."],
+[8,"CVE","A public identifier for a known security vulnerability.","A critical CVE in a key system can force an unplanned release."],
+[8,"Patch SLA","The committed time to fix vulnerabilities by severity.","Plan release capacity around it."],
+[8,"SOC 2 Type II","An independent report on a service provider's controls, tested over a period.","Ask vendors for it before contract signature."],
+[8,"ISO 27001","The international standard for an information security management system.","A baseline expectation for critical vendors."],
+[8,"Data residency","Requirements on where data is physically stored.","Can change cloud region and architecture choices in APAC."],
+[8,"Segregation of duties","No one person controls a full sensitive process end to end.","Auditors test this in ERP and finance systems."],
+[9,"LLM","Large language model: AI that generates text by predicting likely next words.","Powerful but probabilistic. Plan for review and verification."],
+[9,"Hallucination","Confident but incorrect AI output.","Why human review and grounding matter in business use."],
+[9,"RAG","Retrieval-augmented generation: the model answers using retrieved company documents.","The usual pattern for enterprise knowledge assistants."],
+[9,"AI agent","An AI system that uses tools and takes actions towards a goal.","Needs clear permissions, logging and human checkpoints."],
+[9,"Human-in-the-loop","A person reviews or approves AI output before it takes effect.","Essential where errors are costly or regulated."],
+[9,"RPA","Robotic process automation: software bots that mimic user clicks and keystrokes.","Quick wins, but brittle when screens change. Budget for maintenance."],
+[9,"AIOps","Using AI to correlate IT alerts and automate operational responses.","Can cut alert noise and speed up incident diagnosis."],
+[9,"ISO 42001","The international standard for an AI management system.","A signal of mature AI governance in vendors."],
+[10,"CapEx","Capital expenditure on assets, depreciated or amortised over time.","Affects how projects are funded and how benefits are reported."],
+[10,"OpEx","Operating expenditure, expensed as incurred.","Cloud and SaaS move spend here; check budget ownership."],
+[10,"TCO","Total cost of ownership across the full lifecycle.","Compare options on five-year TCO, not purchase price."],
+[10,"FinOps","The discipline of managing cloud spend collaboratively across finance, tech and business.","Brings your FP&A skills straight into cloud conversations."],
+[10,"Showback vs chargeback","Showback shows teams their costs; chargeback bills them.","Showback first builds trust before money moves."],
+[10,"True-up","A periodic reconciliation where you pay for licence usage above what you bought.","Unbudgeted true-ups are a classic year-end surprise."],
+[10,"SOW","Statement of work: the specific deliverables, timeline and acceptance criteria under a contract.","Vague acceptance criteria cause most vendor disputes."],
+[10,"Service credit","A contractual payment or discount when a vendor misses an SLA.","Rarely covers real impact; better as a signal than as compensation."],
+[10,"SIAM","Service integration and management: coordinating multiple vendors as one service.","Relevant when several vendors share responsibility for one outcome."],
+[11,"WSJF","Weighted shortest job first: cost of delay divided by job size.","A defensible way to rank competing requests."],
+[11,"RAID log","A register of risks, assumptions, issues and dependencies.","Items without owners and dates are just worries."],
+[11,"BLUF","Bottom line up front: lead with the conclusion and the decision needed.","The single most useful habit for executive updates."],
+[11,"Tolerance","The agreed range of deviation before something must be escalated.","Makes escalation predictable instead of personal."],
+[11,"Benefits realisation","Measuring whether a project delivered its promised value after go-live.","Where PMOs prove their own value."],
+[11,"OKR","Objectives and key results: a goal plus measurable outcomes.","Links portfolio work to outcomes, not output."],
+[11,"Stage gate","A formal decision point between project phases.","Gates should be able to stop projects, not just stamp them."],
+[11,"Dependency","Work one team needs from another before it can proceed.","Most cross-team delays start as unmanaged dependencies."],
+[12,"High-context communication","Meaning carried by relationship, tone and what's left unsaid.","Confirm agreements in writing across APAC teams."],
+[12,"ADKAR","Awareness, Desire, Knowledge, Ability, Reinforcement: stages of individual change.","Find the stage where adoption is stuck."],
+[12,"Change champion","A local advocate who supports adoption in their team or country.","Your force multiplier across time zones."],
+[12,"Pre-wiring","Socialising a proposal one to one before the decision meeting.","Turns meetings into confirmations instead of debates."],
+[12,"Stakeholder map","A grid of stakeholders by power and interest.","Decides who you manage closely and who you keep informed."],
+[12,"Psychological safety","A shared belief that it's safe to raise problems and admit mistakes.","Without it, red status arrives late."]
+].map((c,i)=>({id:"c"+i, m:c[0], t:c[1], d:c[2], p:c[3]}));
+
+const PHRASES = [
+{s:"Asking a technical question without bluffing", p:["Walk me through it as if I'm explaining it to the business tomorrow.","What's the one thing that would make this fail?","Is this a one-off fix or a pattern we'll see again?","What would you need from me to unblock this?"]},
+{s:"Giving a status update", p:["Bottom line: we're amber, trending to green, and I need one decision today.","Here's what changed since last week, and why.","We're on track for the date; the risk to watch is the integration testing window.","Two things are done, one is late, and here's the recovery plan."]},
+{s:"Escalating", p:["I'm raising this now so it's a choice, not a surprise.","This is outside my tolerance on time. Here are the options and my recommendation.","I need your help with one specific thing: a decision on the vendor's change order by Friday.","We've tried the following at team level; it now needs your authority."]},
+{s:"Pushing back on scope or timeline", p:["We can hit the date or the full scope, not both. Which matters more?","If this comes in, what comes out?","I'd rather commit to a date we'll hit than one we'll explain later.","Let's look at what the smallest valuable release would be."]},
+{s:"Running a cross-APAC call", p:["Before we close, I'd like to hear from Tokyo and Jakarta. What are we missing?","I'll send a written summary within the hour. Please correct anything I've got wrong.","We'll rotate this slot next month so it's not always late for the same team.","Let's agree owners and dates now, so nothing depends on memory."]},
+{s:"Managing a vendor", p:["Let's start from the acceptance criteria in the SOW.","What would it take to get this back on plan, and what does it cost you?","I'd like the trend over the last quarter, not just this month's numbers.","We value the partnership, and this needs to change by the next QBR."]},
+{s:"Saying no, constructively", p:["Not this quarter, and here's when we could revisit it.","I can't commit to that, but I can offer this instead.","That's a fair ask. It doesn't fit our capacity, so let's take it to the prioritisation forum.","I'd rather say no now than deliver it badly."]},
+{s:"Closing a meeting with clarity", p:["So the decision is X, the owner is Y, and the date is Z. Have I got that right?","What's the first thing that happens after this call?","Anything we said today that shouldn't leave this room?","I'll circulate actions by end of day."]}
+];
+
+const PERSONAS = [
+{id:"dev", n:"Defensive tech lead", d:"a senior tech lead whose team is three weeks behind on an integration. You feel the PMO adds reporting overhead and doesn't understand the technical complexity. You are not hostile, just guarded.", o:"Look, I know we're behind, but these status reports don't help. The other team's API keeps changing under us."},
+{id:"cio", n:"Regional CIO in a hurry", d:"the regional CIO for Asia Pacific. You have five minutes, you dislike long explanations, and you want a clear recommendation and what you need to decide.", o:"I've got five minutes before my next call. Where are we on the cloud migration, and what do you need from me?"},
+{id:"vendor", n:"Vendor account manager", d:"an account manager at an IT services vendor. Your delivery has slipped and you're pushing a paid change order, arguing the requirements changed. You are polite and persuasive.", o:"Thanks for making time. We've analysed the new requirements and, honestly, this is out of scope, so we've prepared a change order."},
+{id:"biz", n:"Country business head", d:"a country business head who wants to buy your own local CRM because global IS is too slow. You have budget and a vendor lined up and you're frustrated.", o:"I've waited eight months for two simple changes. I have the budget, so I'm going to buy our own tool. Why shouldn't I?"},
+{id:"sec", n:"Security lead blocking a go-live", d:"the regional security lead. A go-live is planned for Monday, but the vendor's penetration test found two high-severity findings that aren't fixed. You will not approve without a credible plan.", o:"I can't sign off Monday's go-live. Two high findings are still open from the pen test."}
+];
+
+const SOURCES = [
+{n:"ETCIO", u:"https://cio.economictimes.indiatimes.com/", w:"Indian enterprise IT news and CIO interviews"},
+{n:"CIO Dive", u:"https://www.ciodive.com/", w:"Short, readable enterprise IT news"},
+{n:"Computer Weekly", u:"https://www.computerweekly.com/", w:"Enterprise IT, with APAC coverage"},
+{n:"Gartner Newsroom", u:"https://www.gartner.com/en/newsroom", w:"Forecasts and survey headlines leaders quote"},
+{n:"MIT Technology Review", u:"https://www.technologyreview.com/", w:"AI and emerging tech, explained well"},
+{n:"The Hacker News", u:"https://thehackernews.com/", w:"Security incidents and vulnerabilities"},
+{n:"Azure Updates", u:"https://azure.microsoft.com/en-us/updates/", w:"What changed in Microsoft cloud"},
+{n:"AWS What's New", u:"https://aws.amazon.com/new/", w:"What changed in AWS"},
+{n:"TLDR newsletter", u:"https://tldr.tech/", w:"A five-minute daily tech digest"},
+{n:"PMI", u:"https://www.pmi.org/", w:"Project management practice and certifications"}
+];
+
+const CFO_WEEKS = [
+{t:"The CFO's job today", s:"What the role really is, and how people get there", days:[
+ {t:"The four faces of the CFO", k:["Deloitte's widely used model describes four roles: steward (protect assets, accurate reporting, compliance), operator (run finance efficiently), strategist (shape company direction) and catalyst (drive change across the business).","Most CFOs are hired for strategist and catalyst, but fired for failures in steward and operator.","The modern CFO often also owns IT, procurement, risk or strategy, which makes technology fluency a real differentiator.","Boards judge a CFO on credibility of numbers, quality of capital allocation, and calm under pressure."], ex:"Rate yourself from 1 to 5 on each face, with one piece of evidence for each score. Which face is your current role building, and which is it not?", say:"I'd describe myself as strong on strategist and operator, and I'm deliberately building my steward credentials."},
+ {t:"The finance organisation", k:["Typical reports to a CFO: Financial Controller (accounting, close, reporting), FP&A, Treasury, Tax, Investor Relations, Internal Audit (often dotted line to the audit committee), and sometimes Risk, Legal, IT and Procurement.","Shared services or global business services handle transactional work such as payables, receivables and payroll.","Finance business partners sit with business units and translate numbers into decisions.","A CFO's span is wide, so the job is mostly choosing strong heads for each tower and setting standards."], ex:"Sketch the finance organisation of your current company or a company you'd like to join. Which towers have you worked in, and which have you never touched?", say:"I've worked deeply in FP&A and corporate development. Controllership is the tower I'm building next."},
+ {t:"Paths to the chair", k:["In India many CFOs come through chartered accountancy; a growing number come through an MBA with FP&A, strategy, corporate development or investment banking experience.","Common accelerators: owning a P&L or a business-unit finance role, leading an audit or close, raising capital, completing a major deal, and gaining board exposure.","Credentials people weigh: CA, US CPA or CMA, CFA, ACCA. They signal technical depth; they don't substitute for experience.","Typical progression: analyst, manager, finance business partner or FP&A lead, business-unit CFO or controller, VP Finance, then CFO."], ex:"List the next two roles that would sit between you and a CFO seat. For each, write what experience it would add that you don't have yet.", say:"My route isn't the classic CA route, so I'm collecting the experiences that make it credible: controllership, capital raising and board exposure."},
+ {t:"Your gap analysis", k:["Strengths a strategy-and-FP&A background usually brings: planning, modelling, deal analysis, cost programmes, communicating numbers.","Common gaps for non-CA candidates: accounting standards, statutory audit, tax, treasury and regulatory compliance.","Your current IS role is an asset if you frame it right: technology cost governance, transformation delivery and cross-border leadership are CFO-relevant.","A deliberate plan beats a vague ambition: name the gap, the role or project that closes it, and the date."], ex:"Build a two-column table: CFO capabilities in one column, your evidence in the other. Mark each row green, amber or red. Pick the two reds you'll close first.", say:"My plan for the next two years closes two specific gaps: reporting and controls, and treasury."},
+ {case:true, t:"Case: the mentor's challenge", k:["A senior CFO agrees to mentor you. In the first meeting they say: 'You're not a CA and you're currently running IS projects. Convince me you're on a credible CFO track.'"], ex:"Write the two-minute answer: your arc so far, why it adds up, the gaps you're closing, and what help you'd ask for.", say:"I'm not asking you to ignore the gaps. I'd like your advice on closing them faster."}
+]},
+{t:"Accounting and reporting", s:"Read and talk about financial statements like a controller", days:[
+ {t:"Three statements, one story", k:["The income statement shows performance over a period; the balance sheet shows position at a point in time; the cash flow statement explains how cash moved.","Net income flows to retained earnings on the balance sheet and is the starting point of operating cash flow under the indirect method.","Non-cash items (depreciation, provisions) reduce profit but not cash; working capital changes move cash without touching profit.","Interviewers love asking how a single change flows through all three statements."], ex:"Take a ₹100 increase in depreciation with a 25% tax rate. Write how it changes each statement. Then check your answer against the hint on the Speak tab's interview question on this topic.", say:"Profit is an opinion and cash is a fact, so I always read the three statements together."},
+ {t:"Revenue and leases", k:["Ind AS 115 / IFRS 15 recognises revenue in five steps: identify the contract, identify performance obligations, set the transaction price, allocate it, recognise revenue as each obligation is satisfied.","Multi-year service contracts, bundles and milestone billing are where judgement and audit questions concentrate.","Ind AS 116 / IFRS 16 puts most leases on the balance sheet as a right-of-use asset and a lease liability.","Lease accounting moves rent out of operating expenses into depreciation and interest, which raises reported EBITDA. Analysts often adjust for it."], ex:"Pick one contract type in your company, such as a multi-year SaaS subscription or a services retainer. Walk it through the five steps in plain words.", say:"Before we celebrate the EBITDA improvement, how much of it is lease accounting rather than operations?"},
+ {t:"The close and consolidation", k:["The month-end close turns transactions into reliable statements: accruals, reconciliations, intercompany matching, review and sign-off.","Consolidation combines subsidiaries, eliminates intercompany transactions and translates foreign currencies.","Days to close is a common efficiency measure; fast closes rely on automation and clean master data.","In APAC groups, intercompany charges, multiple currencies and different statutory calendars make the close harder."], ex:"Ask a controller colleague for the close calendar. Note the three steps that take longest and why.", say:"What's driving our days to close: data, approvals, or intercompany reconciliation?"},
+ {t:"Audit and internal controls", k:["The statutory auditor gives an opinion on whether the financial statements are true and fair.","India's Companies Act requires internal financial controls, and auditors report on controls over financial reporting; US-listed groups face SOX.","Key control themes: access, segregation of duties, approvals, reconciliations, change management in finance systems.","The audit committee oversees auditors and controls; a CFO's relationship with it is critical."], ex:"List five controls that protect revenue or payments in your organisation. Which depend on IT systems your team supports?", say:"I'd rather find the control gap ourselves than read about it in the management letter."},
+ {case:true, t:"Case: the auditor's question", k:["During the year-end audit, the auditor challenges revenue recognised upfront on a three-year contract that includes implementation plus ongoing support.","The business head insists the deal was 'won and signed', so the revenue is real."], ex:"How do you analyse it under the five steps? What do you say to the business head? What do you tell the CFO and when?", say:"The deal is real. The question is timing, and the standard is clear about how we spread it."}
+]},
+{t:"FP&A that drives decisions", s:"Turn your existing strength into executive influence", days:[
+ {t:"Driver-based planning and rolling forecasts", k:["Driver-based plans model the business through a few operational drivers (volumes, prices, headcount, utilisation) rather than line-by-line guesses.","Rolling forecasts look a fixed number of quarters ahead and update regularly, instead of freezing an annual budget.","Good forecasts are accurate, timely and explain what changed since last time.","Forecast accuracy and bias (consistently high or low) are worth tracking."], ex:"Pick one cost line you manage. Identify the two or three drivers that really explain it and rebuild the forecast from them.", say:"Let's forecast from the drivers, so when a number moves we already know why."},
+ {t:"Variance analysis that explains", k:["Split revenue variances into price, volume and mix; split cost variances into rate and usage.","Separate timing differences from permanent ones.","Lead with the two variances that matter, not a list of twenty.","Always end with the action: what are we changing because of this?"], ex:"Take last month's biggest variance in your area. Split it into price, volume and mix or rate and usage, and write the one-line action.", say:"Two-thirds of the miss is mix, not volume, which changes what we should do about it."},
+ {t:"Unit economics", k:["Contribution margin: revenue minus variable costs, per unit, customer or contract.","Customer acquisition cost, lifetime value and payback period are standard for subscription businesses.","Cost-to-serve analysis often reveals unprofitable customers or services.","Unit economics connect operational choices to profit in a way boards remember."], ex:"For one service your organisation provides, estimate revenue, variable cost and contribution per unit. Is any segment loss-making?", say:"At the unit level this service is profitable; the loss comes from how we allocate fixed costs."},
+ {t:"Scenarios, sensitivities and zero-based budgeting", k:["Scenario planning tests the plan against a few coherent futures; sensitivity analysis flexes one variable at a time.","Present the base case plus the scenarios that would change a decision.","Zero-based budgeting builds costs from zero each cycle, forcing justification of every line; it works best on discretionary spend.","Your IT cost and chargeback experience is directly relevant to ZBB conversations."], ex:"Build a simple three-scenario view (base, downside, upside) for your area's budget, with the trigger that would move you from one to another.", say:"In the downside case we'd pull these three levers, in this order."},
+ {case:true, t:"Case: why did EBITDA miss?", k:["Quarterly EBITDA came in 8% below forecast.","The CEO wants a clear explanation in tomorrow's leadership meeting, and each business head has a different story."], ex:"How do you structure the bridge from forecast to actual? Which three questions do you ask business heads tonight? What does your one-slide answer look like?", say:"Here's the bridge: three items explain 90% of the miss, and only one of them is likely to repeat."}
+]},
+{t:"Cash, working capital and treasury", s:"The part of finance that keeps a company alive", days:[
+ {t:"Cash versus profit", k:["A profitable company can still run out of cash if receivables grow faster than collections.","Free cash flow is operating cash flow minus capital expenditure; many investors value companies on it.","Cash flow from operations, investing and financing tell different stories about the business.","CFOs are judged heavily on cash discipline in tough markets."], ex:"Look at your company's (or a listed peer's) last annual report. Compare net profit and operating cash flow for two years. What explains the difference?", say:"Our profit grew, but operating cash didn't. Receivables explain most of the gap."},
+ {t:"Working capital and the cash conversion cycle", k:["Cash conversion cycle = days sales outstanding + days inventory outstanding − days payables outstanding.","Lower DSO means you collect faster; higher DPO means you pay slower, within terms and supplier relationships.","Services businesses mostly manage receivables and unbilled revenue rather than inventory.","Small improvements in DSO can release large amounts of cash."], ex:"Estimate DSO for your business or a peer. Calculate how much cash a 10-day improvement would release.", say:"Cutting ten days off DSO releases more cash than this year's cost programme."},
+ {t:"The 13-week cash forecast", k:["A rolling 13-week direct cash forecast shows receipts and payments week by week.","It's the core tool in tight liquidity or covenant situations.","Accuracy comes from talking to collections, payables and payroll teams, not just the ledger.","Variance to last week's forecast teaches you where your assumptions are wrong."], ex:"Sketch the structure of a 13-week cash forecast for a services company: receipt lines, payment lines, opening and closing cash, minimum balance.", say:"Our 13-week view shows the pinch point in week seven, so we're acting now."},
+ {t:"Treasury basics", k:["Treasury manages liquidity, banking relationships, funding, investments and financial risk.","FX risk arises when revenues and costs are in different currencies; forwards and options are common hedges.","Interest rate risk affects floating-rate debt.","In APAC groups, cash pooling, repatriation rules and withholding taxes shape where cash sits."], ex:"Identify one currency exposure in your organisation, such as INR costs against USD or EUR revenue. How is it managed today?", say:"Our exposure is mostly transactional, so a rolling hedge on forecast flows makes more sense than speculating on the rate."},
+ {case:true, t:"Case: the 90-day delay", k:["Your largest customer announces it will pay 90 days late for the next two quarters.","Your loan covenant requires a minimum liquidity level, and headroom is thin."], ex:"What do you do in the first week? Which levers can you pull across receivables, payables, spend and funding? How do you brief the board and the bank?", say:"We've identified the gap, the levers that close it, and when we'll talk to the bank, before they hear it elsewhere."}
+]},
+{t:"Capital, valuation and allocation", s:"How CFOs decide where money goes", days:[
+ {t:"Cost of capital", k:["WACC blends the cost of equity and the after-tax cost of debt by their weights.","Cost of equity is often estimated with CAPM: risk-free rate plus beta times the equity risk premium.","Debt is cheaper than equity because of tax deductibility and seniority, but too much raises risk.","Investments must earn more than the cost of capital to create value."], ex:"Find the risk-free rate (Indian 10-year government bond yield) and estimate a cost of equity for a company you know, stating your assumptions.", say:"This project clears our hurdle rate, but only just, so the downside case matters."},
+ {t:"Valuation: DCF and multiples", k:["A DCF values a business by discounting forecast free cash flows and a terminal value.","Multiples such as EV/EBITDA and P/E compare a company with peers or past transactions.","Enterprise value belongs to all capital providers; equity value is what's left for shareholders after net debt.","Most of a DCF's value often sits in the terminal value, so test those assumptions hardest."], ex:"For one listed company, find its EV/EBITDA and compare it with two peers. What might explain the difference?", say:"The DCF and the trading multiples point to a similar range, which gives me some confidence."},
+ {t:"Capital allocation", k:["Capital allocation choices: reinvest in the business, acquire, pay down debt, pay dividends, buy back shares.","Return on invested capital compared with WACC shows whether growth creates value.","NPV, IRR and payback each answer a different question; NPV is the most reliable for value.","Good CFOs kill projects as readily as they approve them."], ex:"Take one IS project in your portfolio and evaluate it with NPV, IRR and payback. Which measure would a CFO weight most, and why?", say:"Positive NPV, but a long payback. Let's look at whether we can phase the investment."},
+ {t:"Debt and funding", k:["Common instruments: term loans, working capital facilities, bonds and non-convertible debentures in India.","Covenants (leverage, interest cover, minimum liquidity) protect lenders and constrain the company.","Credit ratings affect cost and access to debt.","The right capital structure depends on cash flow stability, growth plans and risk appetite."], ex:"Read the borrowings note in a listed company's annual report. List the instruments, rates and any covenants mentioned.", say:"We have headroom on leverage, but interest cover is the covenant to watch if rates rise."},
+ {case:true, t:"Case: three uses for the same money", k:["The board has surplus cash and three proposals: a buyback, an acquisition in an adjacent market, or paying down expensive debt."], ex:"What analysis would you run for each? What non-financial factors matter? What recommendation structure would you bring to the board?", say:"Here's how each option compares on value, risk and flexibility, and why I recommend this sequence."}
+]},
+{t:"M&A and corporate development", s:"Build on your deal experience to CFO level", days:[
+ {t:"The deal lifecycle", k:["Strategy and thesis, target screening, approach, valuation, due diligence, negotiation and SPA, approvals, closing, integration.","A clear deal thesis states why this target, why now, and why we are the right owner.","Due diligence spans financial, tax, legal, commercial, technology, HR and increasingly cyber and ESG.","Most value is created or destroyed after closing, in integration."], ex:"Write the deal thesis for an acquisition you've worked on or read about, in three sentences.", say:"Before we talk price, can we agree the thesis in three sentences?"},
+ {t:"Synergies and why they disappoint", k:["Cost synergies (procurement, duplicate functions, IT consolidation) are more reliable than revenue synergies.","Synergies need owners, timelines and one-off costs to achieve them.","Overpaying for synergies hands the value to the seller.","Technology integration is often the slowest and most expensive part. Your IS experience is valuable here."], ex:"For one deal, list three cost synergies and three revenue synergies with a realistic timeline and one-off cost for each.", say:"I'd only pay for the cost synergies; revenue synergies are upside."},
+ {t:"SPA terms that matter", k:["Representations and warranties state facts about the business; indemnities cover specific known risks.","Earn-outs bridge valuation gaps by paying more if targets are met, but often cause disputes.","Conditions precedent, material adverse change clauses and locked-box or completion accounts mechanisms shape risk and price.","Escrows and holdbacks protect the buyer after closing."], ex:"For a deal you know, note which risks were handled by price, which by indemnity, and which by an earn-out.", say:"That risk is known, so I'd rather cover it with a specific indemnity than a general warranty."},
+ {t:"Post-merger integration", k:["Day 1 must be flawless: payroll, customer continuity, legal entity, communications, access to systems.","Day 100 plans deliver early synergies and settle the operating model.","An integration management office tracks workstreams, risks and synergies, just like a PMO.","Culture and key-person retention decide whether the deal works."], ex:"Draft a one-page Day 1 readiness checklist for an acquisition, covering finance, HR, IT, legal and customers.", say:"Integration is a programme, not an afterthought. Here's the governance I'd set up."},
+ {case:true, t:"Case: numbers that look too good", k:["A target's EBITDA margin is ten points above peers, and growth has accelerated in the year before sale.","The seller wants exclusivity signed within two weeks."], ex:"Which diligence questions do you prioritise? What quality-of-earnings adjustments would you look for? What would make you walk away?", say:"Before exclusivity, I need comfort on quality of earnings: one-offs, capitalised costs and customer concentration."}
+]},
+{t:"Tax, regulation and governance", s:"The rules a CFO signs their name to", days:[
+ {t:"Tax fluency", k:["India's GST has central, state and integrated components, with input tax credit preventing tax on tax.","Direct tax covers corporate income tax, withholding taxes and advance tax.","The effective tax rate differs from the statutory rate because of incentives, losses and non-deductible items.","A CFO needs to ask the right tax questions early, especially in deals and cross-border flows."], ex:"Find one company's effective tax rate and statutory rate. List possible reasons for the gap.", say:"Has tax reviewed this structure before we commit, including GST and withholding?"},
+ {t:"Transfer pricing and global minimum tax", k:["Transfer pricing requires intercompany transactions to be priced at arm's length, with documentation.","APAC groups often charge for management services, IT and royalties across borders, which tax authorities scrutinise.","The OECD's Pillar Two sets a 15% global minimum tax for large groups with revenue of €750 million or more; countries are implementing it on different timelines.","IT chargebacks between entities are a transfer pricing question, not just an internal accounting one."], ex:"List the intercompany charges that touch IS in your region. Who documents them, and on what basis are they priced?", say:"Our IT chargeback crosses borders, so it needs transfer pricing support, not just a cost allocation key."},
+ {t:"The CFO's legal role in India", k:["Under the Companies Act 2013, the CFO is key managerial personnel.","For listed companies, SEBI's listing regulations require the CEO and CFO to certify the financial results and the adequacy of internal controls.","Related party transactions need approvals and disclosure.","Personal accountability is real; strong controls protect the CFO as much as the company."], ex:"Read the CEO/CFO certification in a listed company's annual report. Write down what the CFO is personally confirming.", say:"I'll only certify what our controls can actually support, so let's close this gap before quarter end."},
+ {t:"Boards and audit committees", k:["The audit committee oversees financial reporting, auditors, internal controls and risk.","Independent directors expect clear, honest papers with the decision and the risks up front.","Never surprise a board; pre-brief the chair on difficult news.","Board exposure is one of the biggest accelerators towards a CFO role. Seek chances to present."], ex:"Rewrite one of your steering committee papers as if it were going to an audit committee: purpose, decision, key risks, recommendation, in one page.", say:"The paper asks for one decision and sets out the risks of each option."},
+ {case:true, t:"Case: the challenged charge", k:["A tax authority in one APAC country challenges the IT services charge your regional HQ bills to the local entity, calling it excessive.","The local finance head wants to stop paying the charge immediately."], ex:"What do you check first? Who needs to be involved? What do you advise the local finance head, and what changes for next year?", say:"Stopping payment creates new problems. Let's check the documentation and the benefit test first."}
+]},
+{t:"Risk, controls and ESG", s:"Protecting value and reporting beyond the numbers", days:[
+ {t:"Enterprise risk management", k:["ERM identifies, assesses and manages risks across the company against an agreed risk appetite.","Risk registers rank risks by likelihood and impact, with owners and mitigations, similar to a RAID log at company level.","Key risk indicators warn early.","Boards increasingly expect technology, cyber and supply chain risks to be quantified in financial terms."], ex:"Take your top five project risks and restate each in financial terms: what's the exposure in rupees or euros?", say:"Expressed in money, this cyber risk is bigger than our largest FX exposure."},
+ {t:"Three lines and fraud risk", k:["The IIA's Three Lines Model: management owns risk, risk and compliance functions oversee it, internal audit gives independent assurance.","Fraud needs pressure, opportunity and rationalisation (the fraud triangle); controls reduce opportunity.","Common fraud areas: expenses, procurement, revenue manipulation, payroll.","Data analytics now detects anomalies across full populations, not just samples."], ex:"Name one process in your area where segregation of duties is weak. What compensating control exists?", say:"I'd like analytics on the full population of payments, not a sample."},
+ {t:"ESG reporting", k:["India requires the Business Responsibility and Sustainability Report (BRSR) for its top 1,000 listed companies, with BRSR Core assurance phasing in.","The ISSB's IFRS S1 and S2 set global baselines for sustainability and climate disclosure; several APAC jurisdictions are adopting them.","The EU's CSRD affects many groups with European operations, though its scope is being revised.","Finance increasingly owns ESG data quality and assurance, much like financial data."], ex:"Read your company's or a peer's sustainability report. Note which numbers look assured and which don't.", say:"If we're going to publish it, it needs the same data discipline as our financial numbers."},
+ {t:"Technology risk as financial risk", k:["Cyber incidents, outages and failed implementations show up in the P&L, in disclosures and sometimes in valuations.","ERP failures have caused restatements and missed results at well-known companies.","CFOs increasingly co-own technology investment decisions and their risks.","This is where your tech line and CFO line meet: you can speak both languages."], ex:"Write a short note to a CFO explaining one current IS risk in your area, its financial exposure, and what it would cost to reduce it.", say:"This isn't an IT issue, it's a revenue-at-risk issue. Here's the number."},
+ {case:true, t:"Case: the whistleblower", k:["An anonymous complaint alleges that a country manager has been approving inflated vendor invoices from a related company."], ex:"What are your first steps? Who must be informed, and who must not? How do you preserve evidence and protect the whistleblower?", say:"We'll handle this through the formal process: independent, confidential and documented."}
+]},
+{t:"Investors and capital markets", s:"Telling the financial story outside the company", days:[
+ {t:"The equity story", k:["An equity story explains why the company will create value: market, edge, growth drivers, margins, capital allocation and management.","Consistency builds credibility; changing the story every quarter destroys it.","KPIs disclosed to investors should be ones management actually runs the business on.","Your IPO documentation experience is directly relevant here."], ex:"Write a five-sentence equity story for your company or a listed company you admire.", say:"Our story is simple: a growing market, a durable edge, and disciplined capital allocation."},
+ {t:"Earnings, guidance and analyst calls", k:["Guidance sets expectations; missing your own guidance hurts more than missing analysts' estimates.","Prepare for earnings calls with likely questions and agreed answers, and never improvise on numbers.","Bridge charts and non-GAAP measures help, if reconciled and used consistently.","Bad news is best delivered early, clearly and with a plan."], ex:"Read the transcript of a recent earnings call of an Indian listed company. Note the three toughest analyst questions and how the CFO answered.", say:"We're lowering guidance for two specific reasons, and here's what we're doing about each."},
+ {t:"The IPO journey", k:["In India, the DRHP is filed with SEBI, then the RHP before the issue opens, followed by the prospectus.","Bankers, lawyers, auditors and the company build the offer document, financial disclosures and risk factors.","Anchor investors, pricing, allotment and lock-ins shape the listing.","Being public adds quarterly reporting, disclosure obligations and constant market scrutiny."], ex:"Outline the IPO timeline from appointing bankers to listing day, and mark where finance carries the heaviest load.", say:"The IPO isn't the finish line; it's the start of quarterly accountability."},
+ {t:"Numbers for non-finance audiences", k:["Lead with the insight, then the number, then the method only if asked.","Round numbers and use comparisons people can feel.","One chart, one message.","The CFO who can explain finance simply becomes the CEO's most trusted partner."], ex:"Take a complex number from your work (a cost allocation, a business case) and explain it in three sentences to someone with no finance background.", say:"In plain terms: for every rupee we put in, we expect about one and a half back within three years."},
+ {case:true, t:"Case: the guidance cut", k:["You must explain a 6% cut to annual revenue guidance on tomorrow's analyst call.","Two causes: a delayed large contract and weaker demand in one market."], ex:"Draft the opening statement (about 150 words). List the five toughest questions you expect and your answer to each.", say:"We're being specific about what changed, what didn't, and what we're doing."}
+]},
+{t:"Finance transformation", s:"The digital CFO, and your bridge from IS to finance", days:[
+ {t:"The finance operating model", k:["Modern finance splits into transactional processing (often global business services), centres of excellence (tax, treasury, reporting) and business partnering.","Shared services and GBS centres in India serve many global groups.","The aim is lower cost per transaction, faster close and more time for insight.","Your shared services and chargeback experience fits squarely here."], ex:"Map your company's finance operating model into these three layers. Where are the biggest inefficiencies?", say:"We should spend less time producing numbers and more time explaining them."},
+ {t:"ERP and EPM for finance", k:["ERP finance modules (SAP S/4HANA, Oracle Fusion, Dynamics 365) hold the general ledger and transactions.","Enterprise performance management tools (Anaplan, Oracle EPM, OneStream, SAP Analytics Cloud, Workday Adaptive Planning) handle planning, consolidation and reporting.","Clean master data and a sound chart of accounts matter more than the tool.","Finance system projects are IS projects with finance stakes, exactly where you sit today."], ex:"List the finance systems your organisation uses and how data flows between them. Where is the manual spreadsheet glue?", say:"The tool won't fix the process. Let's agree the chart of accounts and data owners first."},
+ {t:"AI and automation in finance", k:["Common uses: invoice processing, reconciliations, anomaly detection, forecasting, close commentary and contract review.","Generative AI can draft variance commentary and board summaries, but needs review and grounding in real data.","Controls and auditability must extend to automated and AI-assisted steps.","Measure value in close days saved, accuracy and analyst time released."], ex:"Identify three finance tasks in your organisation that are good automation candidates. Score each on value, feasibility and control risk.", say:"Automate the reconciliation, keep a human on the judgement, and log both for audit."},
+ {t:"Your bridge move", k:["Roles that bridge IS and finance: finance transformation lead, IT finance business partner, finance systems programme director, controller of a technology-heavy business.","Your differentiator: you can run a transformation and read a P&L, and few candidates can do both.","Build visible finance credentials now: own the IS budget narrative, present to finance leadership, volunteer for close or audit-related projects.","Time the move when you have a quantified transformation win to point to."], ex:"Write your bridge plan: the target role, three actions in the next six months, and the result you'll be able to quote.", say:"I've delivered transformation inside IS; the next step is to lead it inside finance."},
+ {case:true, t:"Case: why a PMO person?", k:["You're interviewing for a Head of Finance Transformation role. The CFO says: 'Our last transformation lead was a CA. Why should we pick someone from an IS PMO?'"], ex:"Prepare a 90-second answer that turns your background into the reason to hire you, with two quantified examples.", say:"Because the hard part of finance transformation isn't the accounting, it's delivery, and I bring both."}
+]}
+];
+
+const CFO_CARDS = [
+[101,"Four faces of the CFO","Steward, operator, strategist and catalyst: Deloitte's model of the CFO's roles.","A neat frame for interviews and self-assessment."],
+[101,"Financial controller","Head of accounting, close, reporting and controls.","The tower most non-CA CFO candidates need exposure to."],
+[101,"Finance business partner","A finance professional embedded in a business unit to support decisions.","A common stepping stone from FP&A towards CFO."],
+[101,"KMP","Key managerial personnel under India's Companies Act, which includes the CFO.","Signals personal legal accountability in the role."],
+[101,"Global business services","Shared centres handling finance, HR and IT processes for a group.","India hosts many; leadership roles there are strong finance-ops experience."],
+[101,"P&L ownership","Accountability for a business unit's revenue and costs.","Highly valued experience on the path to CFO."],
+[102,"Accrual accounting","Recording revenue and expenses when earned or incurred, not when cash moves.","Explains why profit and cash differ."],
+[102,"Ind AS 115 / IFRS 15","The revenue standard: a five-step model for recognising revenue from contracts.","Where judgement and audit questions concentrate."],
+[102,"Ind AS 116 / IFRS 16","The lease standard: most leases go on the balance sheet.","Raises reported EBITDA; analysts often adjust for it."],
+[102,"Consolidation","Combining subsidiaries' accounts and eliminating intercompany items.","Hard in multi-currency APAC groups."],
+[102,"Days to close","How long it takes to produce reliable monthly results.","A visible efficiency metric for finance transformation."],
+[102,"Internal financial controls","Controls ensuring reliable financial reporting, required under India's Companies Act.","Many depend on IT systems and access controls."],
+[102,"Management letter","The auditor's letter listing control weaknesses and recommendations.","Nobody wants surprises in it. Fix gaps first."],
+[103,"Driver-based planning","Forecasting from a few operational drivers rather than line by line.","Makes forecasts explainable and faster to update."],
+[103,"Rolling forecast","A forecast that always looks a fixed period ahead and is updated regularly.","More useful than a frozen annual budget."],
+[103,"Price-volume-mix","Splitting a revenue variance into price, volume and mix effects.","Turns 'we missed' into 'here's why'."],
+[103,"Contribution margin","Revenue minus variable costs.","Shows which products, customers or services really make money."],
+[103,"Zero-based budgeting","Building budgets from zero, justifying every line each cycle.","Powerful for discretionary and IT spend."],
+[103,"Forecast bias","A consistent tendency to over- or under-forecast.","Track it; it tells you whose numbers need challenge."],
+[104,"Free cash flow","Operating cash flow minus capital expenditure.","Many investors value companies on it."],
+[104,"DSO","Days sales outstanding: how long customers take to pay.","A 10-day cut can release a lot of cash."],
+[104,"Cash conversion cycle","DSO plus days inventory minus days payables.","Shorter means less cash tied up."],
+[104,"13-week cash forecast","A week-by-week direct cash forecast for the next quarter.","The core tool when liquidity is tight."],
+[104,"FX hedging","Using forwards or options to reduce currency risk.","Common when costs and revenues are in different currencies."],
+[104,"Cash pooling","Combining group entities' cash balances to optimise liquidity.","Shaped by local rules across APAC."],
+[105,"WACC","Weighted average cost of capital: blended cost of equity and after-tax debt.","The hurdle investments must beat."],
+[105,"CAPM","Cost of equity = risk-free rate + beta × equity risk premium.","Standard interview formula."],
+[105,"Enterprise value","Value of the business to all capital providers: equity value plus net debt.","Use EV with EBITDA, not with net income."],
+[105,"EV/EBITDA","A valuation multiple comparing enterprise value with operating profit.","Quick peer comparison."],
+[105,"ROIC","Return on invested capital.","Growth creates value only when ROIC exceeds WACC."],
+[105,"NPV vs IRR","NPV gives value created; IRR gives the return rate.","When they disagree, trust NPV."],
+[105,"Covenant","A lender's condition, such as maximum leverage or minimum interest cover.","Breaching one can trigger default."],
+[106,"Deal thesis","A short statement of why a deal creates value.","Agree it before discussing price."],
+[106,"Cost synergy","Savings from combining operations.","More reliable than revenue synergies."],
+[106,"Quality of earnings","Diligence that tests whether reported earnings are sustainable.","Finds one-offs and aggressive accounting."],
+[106,"Earn-out","Extra payment to sellers if future targets are met.","Bridges price gaps but often causes disputes."],
+[106,"Locked box","A pricing mechanism fixing the price on a past balance sheet date, with leakage protections.","Alternative to completion accounts."],
+[106,"Integration management office","The team running post-merger integration.","A PMO by another name."],
+[107,"GST input tax credit","Credit for GST paid on inputs against GST on outputs.","Prevents tax on tax; documentation matters."],
+[107,"Effective tax rate","Tax expense divided by pre-tax profit.","Differs from the statutory rate for many reasons."],
+[107,"Transfer pricing","Pricing intercompany transactions at arm's length.","IT chargebacks across borders fall under it."],
+[107,"Pillar Two","The OECD's 15% global minimum tax for groups with revenue of €750m or more.","Changes tax planning for large groups."],
+[107,"Related party transaction","A transaction with a connected person or entity.","Needs approvals and disclosure."],
+[107,"Audit committee","The board committee overseeing reporting, auditors and controls.","A CFO's most important board relationship."],
+[108,"Risk appetite","How much risk an organisation is willing to accept to pursue its goals.","Frames which risks to mitigate or accept."],
+[108,"Three Lines Model","Management, oversight functions and internal audit, each with distinct roles in risk.","Clarifies who owns, who oversees, who assures."],
+[108,"Fraud triangle","Pressure, opportunity and rationalisation.","Controls attack opportunity."],
+[108,"BRSR","India's Business Responsibility and Sustainability Report for top listed companies.","Finance increasingly owns its data quality."],
+[108,"ISSB S1 and S2","Global baseline standards for sustainability and climate disclosures.","Being adopted across APAC."],
+[108,"Key risk indicator","A metric that warns that a risk is rising.","The leading indicator of the risk world."],
+[109,"Equity story","Why a company will create value for investors.","Consistency builds credibility."],
+[109,"Guidance","Management's public expectations for future performance.","Missing your own guidance hurts most."],
+[109,"DRHP","Draft red herring prospectus, filed with SEBI before an IPO.","The core disclosure document."],
+[109,"Non-GAAP measure","A metric outside accounting standards, such as adjusted EBITDA.","Must be reconciled and used consistently."],
+[109,"Lock-in","A period during which certain shareholders can't sell after listing.","Affects share supply after the IPO."],
+[109,"Consensus estimate","The average of analysts' forecasts.","Markets react to results versus consensus."],
+[110,"EPM","Enterprise performance management tools for planning, consolidation and reporting.","Anaplan, OneStream, Oracle EPM and others."],
+[110,"Chart of accounts","The structured list of accounts in the general ledger.","Get it right before any finance system project."],
+[110,"Business partnering","Finance working alongside business leaders on decisions.","Where finance earns its seat at the table."],
+[110,"Touchless processing","Transactions processed end to end without manual intervention.","A key finance automation metric."],
+[110,"Continuous close","Performing close activities throughout the month, not just at month end.","Shortens days to close."],
+[110,"Finance transformation","Redesigning finance processes, systems and organisation.","Your natural bridge from IS PMO into finance."]
+].map((c,i)=>({id:"f"+i, m:c[0], t:c[1], d:c[2], p:c[3]}));
+
+const INTERVIEW = [
+{c:"Your story", q:"Tell me about yourself.", w:"Can you give a crisp, relevant narrative that makes them want to hear more?", h:"Present, past, future in about 90 seconds. Present: your current role in one line. Past: two proof points with numbers. Future: why this role is the logical next step."},
+{c:"Your story", q:"Walk me through your career moves. Engineering, then finance, now IS. Why?", w:"Is there a logic to your choices, or are you drifting?", h:"Frame it as one arc: analytical rigour from engineering, business judgement from finance and deals, delivery and technology from IS. End with where the arc points."},
+{c:"Your story", q:"Why are you looking to move?", w:"Are you running away from something? Will you leave us quickly too?", h:"Talk about what you're moving towards, never complain about your employer. One sentence on what you've built, one on what you want next."},
+{c:"Your story", q:"Where do you see yourself in five years?", w:"Is your ambition realistic, and does this role fit it?", h:"Name the direction (finance leadership, CFO track), show the steps, and connect this role to the first step."},
+{c:"Motivation", q:"Why this company, and why this role?", w:"Have you done your homework, or is this one of fifty applications?", h:"Three specifics: something about their business or results, something about the role's scope, and what you'd contribute in the first year."},
+{c:"Motivation", q:"What do you know about our business?", w:"Can you think like an owner?", h:"Business model, main revenue drivers, recent results or news, and one smart question about their challenges."},
+{c:"Behavioural", q:"Tell me about a time you influenced someone without formal authority.", w:"Can you get things done across teams?", h:"STAR: situation, task, the specific actions you took (pre-wiring, data, framing in their goals), and a measurable result."},
+{c:"Behavioural", q:"Tell me about a failure.", w:"Self-awareness, ownership and learning.", h:"Pick a real one with modest stakes. Own your part without blaming others, say what you learned, and show what you now do differently."},
+{c:"Behavioural", q:"Describe a conflict with a stakeholder and how you handled it.", w:"Maturity under pressure.", h:"Show you understood their position, found common ground in a shared goal, and protected the relationship as well as the outcome."},
+{c:"Behavioural", q:"Tell me about a time you used data to change a decision.", w:"Analytical influence, not just analysis.", h:"What decision was heading the wrong way, what analysis you did, how you presented it, and what changed as a result, with a number."},
+{c:"Behavioural", q:"Tell me about a time you delivered under an extreme deadline.", w:"Prioritisation and composure.", h:"Explain what you cut or sequenced, how you kept quality, and how you communicated the trade-offs."},
+{c:"Behavioural", q:"Tell me about a time you disagreed with your manager.", w:"Can you challenge upward respectfully?", h:"Disagree privately and with evidence, then commit once decided. Show the outcome and the relationship afterwards."},
+{c:"Behavioural", q:"Tell me about a tough negotiation.", w:"Commercial sense and composure.", h:"Your preparation (their interests, your walk-away), the key moment, the outcome versus your target."},
+{c:"Leadership", q:"How do you lead a team spread across several countries?", w:"Can you lead in APAC realities: time zones and cultures?", h:"Rhythm (cadence, rotating meeting times), clarity (written decisions, owners, dates), inclusion (hearing quieter voices), one concrete example."},
+{c:"Leadership", q:"How do you handle an underperformer?", w:"Do you address problems or avoid them?", h:"Diagnose first (skill, will or circumstances), set clear expectations and support, follow up on a timeline, act if nothing changes."},
+{c:"Leadership", q:"How would your team describe you?", w:"Self-awareness and leadership style.", h:"Three words with one short example each. Include one honest development area."},
+{c:"Finance", q:"Walk me through how a ₹100 increase in depreciation affects the three statements. Assume 25% tax.", w:"Core accounting fluency.", h:"Income statement: pre-tax profit down 100, net income down 75. Cash flow: start with net income down 75, add back 100 depreciation, so operating cash up 25 from tax saved. Balance sheet: assets down 75 (PP&E down 100, cash up 25), equity down 75 through retained earnings. Balanced."},
+{c:"Finance", q:"How would you improve working capital in a services business?", w:"Practical cash thinking.", h:"Billing speed (unbilled revenue, milestones), collections (DSO, disputes), contract terms, payables discipline within supplier relationships. Quantify the cash released."},
+{c:"Finance", q:"How do you evaluate an acquisition?", w:"Structured deal thinking.", h:"Strategic fit and thesis, standalone valuation, synergies with costs to achieve, risks from diligence, price versus value, integration plan. Mention a deal you've worked on."},
+{c:"Finance", q:"What KPIs would you track for our business?", w:"Commercial acumen.", h:"Growth, margin, cash and returns, tailored to their model (for example utilisation for services, net revenue retention for SaaS). Explain why each matters."},
+{c:"Finance", q:"How would you approach next year's budget?", w:"Process and judgement.", h:"Start from strategy and drivers, top-down targets meeting bottom-up plans, scenario ranges, clear owners, and a rolling forecast after approval."},
+{c:"Transformation", q:"Tell me about a transformation you led. What was the measurable impact?", w:"Can you deliver change, and do you measure it?", h:"Baseline, what you changed, how you governed it, measured result (cost, time, quality), and what you'd do differently."},
+{c:"Transformation", q:"How do you decide which technology projects to fund?", w:"Can you combine finance and tech judgement?", h:"Strategic fit, value with a baseline, total cost of ownership including run costs, risk and capacity. Mention killing projects that stop earning their keep."},
+{c:"Transformation", q:"How would you use AI in finance?", w:"Current awareness with good judgement.", h:"Two or three concrete use cases (reconciliations, forecasting, commentary), the controls you'd keep, how you'd measure value, and a realistic pilot-first approach."},
+{c:"Tricky", q:"What's your biggest weakness?", w:"Honesty and self-management.", h:"A real but non-fatal weakness, how it showed up, and the concrete system you use to manage it. Avoid disguised strengths."},
+{c:"Tricky", q:"You're not a CA. Why should we consider you for a senior finance role?", w:"Can you handle the credential question confidently?", h:"Acknowledge it calmly, then evidence: depth in FP&A, M&A and reporting work, how you've closed technical gaps, what you bring that typical candidates don't. Never sound defensive."},
+{c:"Tricky", q:"Why did you move from finance into an IS role?", w:"Is your career coherent?", h:"Deliberate choice: to learn technology delivery and transformation from the inside, which modern CFOs need. Then show how you're bringing it back to finance."},
+{c:"Tricky", q:"What are your salary expectations?", w:"Market awareness and negotiation poise.", h:"Research the range first. Give a researched range anchored on the role's scope, or ask for their budgeted range. Keep it short and calm."},
+{c:"Closing", q:"Do you have any questions for us?", w:"Curiosity and seriousness.", h:"Ask two: what success looks like in the first year, and the biggest challenge the team faces now. Optionally: how the role works with the CFO or leadership team."}
+];
+
+const PERSONAS_EXTRA = [
+{id:"hr", n:"HR interviewer", d:"an experienced HR interviewer at a large company in India, running a first-round interview for a senior finance or transformation role. You are warm but probing: you test motivation, career logic, job changes, cultural fit, notice period and salary expectations. Ask one question at a time and follow up on vague answers.", o:"Thanks for joining. To start, could you walk me through your background and what brings you to this role?"},
+{id:"cfo", n:"Hiring CFO", d:"the CFO of a mid-sized listed company interviewing for a Head of FP&A or Finance Transformation role. You are sharp and direct. You probe accounting fluency, cash and working capital, M&A judgement, and you will ask why someone without a CA should get the role. Ask one question at a time.", o:"I've read your CV. Interesting mix. Let's start with something practical: how would you explain our last quarter's margin decline to the board?"}
+];
+
+</script>
+<script>
+(function(){
+"use strict";
+const IN_CLAUDE = !!(window.claude && window.claude.use);
+const STANDALONE = !IN_CLAUDE;
+const TRACKS = {
+  tech:{n:"Tech line", weeks:WEEKS, pre:"w", total:WEEKS.length*5},
+  cfo:{n:"CFO line", weeks:CFO_WEEKS, pre:"f", total:CFO_WEEKS.length*5}
+};
+const LESSONS = [];
+Object.keys(TRACKS).forEach(tr=>TRACKS[tr].weeks.forEach((w,i)=>w.days.forEach((d,j)=>LESSONS.push(Object.assign({},d,{id:TRACKS[tr].pre+(i+1)+"d"+(j+1), week:i+1, mod:w.t, track:tr})))));
+const ALLCARDS = CARDS.concat(CFO_CARDS);
+const ALLPERSONAS = PERSONAS.concat(PERSONAS_EXTRA);
+const DEFAULT_PROFILE = "PMO manager for Asia Pacific in an enterprise IS (Digital & Transformation) team. Background in engineering, an MBA, and earlier roles in operations strategy, FP&A, M&A and bid management. Manages technical delivery strategically rather than hands-on. Goals: speak fluently and credibly with engineers, executives and interviewers, and progress towards a CFO role.";
+const BURSTS = [
+ {k:"cards", t:"Flashcards", d:"Tech and finance cards due today", m:"8 min"},
+ {k:"interview", t:"Interview rep", d:"One question, answered out loud", m:"8 min"},
+ {k:"pulse", t:"Pulse scan", d:"Today's news, one item decoded", m:"8 min"},
+ {k:"explain", t:"Explain it in 60 seconds", d:"Say one concept out loud", m:"7 min"},
+ {k:"phrase", t:"Phrase drill", d:"One line to use this week", m:"6 min"},
+ {k:"reflect", t:"What did I hear today?", d:"Capture terms you didn't follow", m:"5 min"}
+];
+const PHASES = [{n:"Learn",m:12},{n:"Apply",m:15},{n:"Speak",m:10},{n:"Lock in",m:8}];
+const GAPS = [0,1,2,4,8,16];
+const STORY_TAGS = ["Influence","Failure","Conflict","Data changed a decision","Deadline","Negotiation","Leadership","Transformation","Deal or finance","Cross-border"];
+const STORY_PROMPTS = ["A deal or acquisition you supported, and your specific part in it","A cost-saving or efficiency programme, with the number","A team or process you restructured","A bid or proposal you won, and what made it win","A dashboard or automation that changed how leaders decided","A conflict across functions or countries that you resolved","Something that went wrong, and what you changed afterwards"];
+const HN_KEYS = {
+  tech:[["software","IT"],["agile","engineering"],["outage","incident"],["cloud","AWS"],["DevOps","deployment"],["SAP","Salesforce"],["data","Databricks"],["security","ransomware"],["AI","LLM"],["cloud cost","licensing"],["project management","engineering management"],["remote work","India"]],
+  cfo:[["CFO","finance"],["accounting","audit"],["forecast","budget"],["cash","payments"],["valuation","interest rates"],["acquisition","merger"],["tax","regulation"],["fraud","ESG"],["IPO","earnings"],["fintech","automation"]]
+};
+const MODELS = [["claude-haiku-4-5-20251001","Haiku 4.5 (fastest, lowest cost)"],["claude-sonnet-4-6","Sonnet 4.6 (better coaching)"],["claude-sonnet-5-5","Sonnet 5.5 (best quality)"]];
+
+/* ---------- state ---------- */
+const LS = "fluencyline.v1";
+const blank = ()=>({v:2, lessons:{}, notes:{}, cards:{}, custom:[], bursts:{}, log:[], act:{}, stories:[], iv:{}, set:{mix:"balanced", profile:""}, pick:null, updated:0});
+let S = blank();
+try{ const raw = localStorage.getItem(LS); if(raw) S = Object.assign(blank(), JSON.parse(raw)); }catch(e){}
+S.set = Object.assign({mix:"balanced", profile:""}, S.set||{});
+const lget = (k,d)=>{ try{ const v=localStorage.getItem(LS+"."+k); return v==null?d:v; }catch(e){ return d; } };
+const lset = (k,v)=>{ try{ v==null? localStorage.removeItem(LS+"."+k) : localStorage.setItem(LS+"."+k, v); }catch(e){} };
+let remote = null, syncLabel = STANDALONE ? "Saved on this phone only" : "Saved on this device";
+let pushTimer = null;
+function save(){
+  S.updated = Date.now();
+  try{ localStorage.setItem(LS, JSON.stringify(S)); }catch(e){}
+  if(remote){
+    clearTimeout(pushTimer);
+    pushTimer = setTimeout(()=>{ remote.set(JSON.parse(JSON.stringify(S))).then(()=>{syncLabel="Synced to your Claude account";}).catch(()=>{syncLabel="Saved on this device (sync paused)";}); }, 900);
+  }
+}
+async function initRemote(){
+  if(!IN_CLAUDE) return;
+  try{
+    const [db,user] = await Promise.all([window.claude.use("db"), window.claude.use("user")]);
+    if(!db || !user) return;
+    const id = await user.id(); if(!id) return;
+    const ref = db.doc("data/users/"+id+"/progress");
+    const snap = await ref.get();
+    remote = ref;
+    if(snap.exists){
+      const r = JSON.parse(JSON.stringify(snap.data()||{}));
+      if((r.updated||0) > (S.updated||0)){ S = Object.assign(blank(), r); S.set=Object.assign({mix:"balanced",profile:""},S.set||{}); try{localStorage.setItem(LS, JSON.stringify(S));}catch(e){} render(); }
+      else if(S.updated > (r.updated||0)) await ref.set(JSON.parse(JSON.stringify(S)));
+    } else if(S.updated){ await ref.set(JSON.parse(JSON.stringify(S))); }
+    syncLabel = "Synced to your Claude account";
+  }catch(e){ remote = null; }
+}
+let SAMPLE = null;
+const apiKey = ()=>STANDALONE ? lget("key","") : "";
+const apiModel = ()=>lget("model", MODELS[0][0]);
+function aiOn(){ return !!SAMPLE || !!apiKey(); }
+function refreshAI(){ document.body.classList.toggle("ai", aiOn()); document.body.classList.toggle("live", STANDALONE); }
+async function initAI(){
+  if(IN_CLAUDE){ try{ SAMPLE = await window.claude.use("sample"); }catch(e){ SAMPLE = null; } }
+  refreshAI();
+}
+
+/* ---------- helpers ---------- */
+const $ = s=>document.querySelector(s);
+const esc = s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const today = ()=>new Date().toLocaleDateString("en-CA");
+const addDays = (iso,n)=>{const d=new Date(iso+"T12:00:00"); d.setDate(d.getDate()+n); return d.toLocaleDateString("en-CA");};
+function hash(s){let h=0; for(const c of s){h=(h*31+c.charCodeAt(0))|0;} return Math.abs(h);}
+function toast(t){const el=$("#toast"); el.textContent=t; el.classList.add("show"); clearTimeout(toast.t); toast.t=setTimeout(()=>el.classList.remove("show"),1800);}
+function markActive(){ S.act[today()] = 1; }
+function burstsToday(){ return S.bursts[today()] || {}; }
+function doneBurst(k){ const t=today(); S.bursts[t] = Object.assign({}, S.bursts[t]||{}, {[k]:1}); markActive(); save(); }
+function nextLesson(tr){ return LESSONS.find(l=>l.track===tr && !S.lessons[l.id]) || null; }
+function weekOf(tr){ const n=nextLesson(tr); return n? n.week : TRACKS[tr].weeks.length; }
+function doneCount(tr){ return LESSONS.filter(l=>l.track===tr && S.lessons[l.id]).length; }
+function todayTrack(){
+  if(S.pick && S.pick.d===today() && nextLesson(S.pick.t)) return S.pick.t;
+  const m = S.set.mix;
+  if(m==="tech" && nextLesson("tech")) return "tech";
+  if(m==="cfo" && nextLesson("cfo")) return "cfo";
+  const ft = doneCount("tech")/TRACKS.tech.total, fc = doneCount("cfo")/TRACKS.cfo.total;
+  if(!nextLesson("tech")) return "cfo"; if(!nextLesson("cfo")) return "tech";
+  return fc < ft ? "cfo" : "tech";
+}
+function allCards(){ return ALLCARDS.concat(S.custom||[]); }
+function cardOpen(c){ if(c.m===0) return true; if(c.m>100) return (c.m-100)<=weekOf("cfo"); return c.m<=weekOf("tech"); }
+function unlockedCards(){ return allCards().filter(cardOpen); }
+function dueCards(){ const t=today(); return unlockedCards().filter(c=>{const r=S.cards[c.id]; return !r || r.d<=t;}); }
+function cardGroup(c){ return c.m===0? "My cards" : c.m>100? "CFO line, week "+(c.m-100)+": "+CFO_WEEKS[c.m-101].t : "Tech line, week "+c.m+": "+WEEKS[c.m-1].t; }
+function streak(){ let d=today(), n=0; if(!S.act[d]) d=addDays(d,-1); while(S.act[d]){ n++; d=addDays(d,-1); } return n; }
+function profile(){ return "Context about the learner: "+((S.set.profile||"").trim()||DEFAULT_PROFILE); }
+function md(text){
+  const lines = esc(text).split(/\n/); let html="", inList=false;
+  for(let ln of lines){
+    ln = ln.replace(/\*\*(.+?)\*\*/g,"<b>$1</b>");
+    if(/^\s*#{1,4}\s+/.test(ln)){ if(inList){html+="</ul>";inList=false;} html+="<h3>"+ln.replace(/^\s*#{1,4}\s+/,"")+"</h3>"; }
+    else if(/^\s*[-*•]\s+/.test(ln)){ if(!inList){html+="<ul>";inList=true;} html+="<li>"+ln.replace(/^\s*[-*•]\s+/,"")+"</li>"; }
+    else if(ln.trim()===""){ if(inList){html+="</ul>";inList=false;} }
+    else { if(inList){html+="</ul>";inList=false;} html+="<p>"+ln+"</p>"; }
+  }
+  if(inList) html+="</ul>";
+  return html;
+}
+const ERR = {
+  not_granted:"Claude features are switched off for this page. Everything else still works.",
+  sampling_disabled:"Claude isn't available on this account right now.",
+  rate_limited:"Too many requests just now. Try again in a minute.",
+  session_expired:"Sign in to Claude again to use this.",
+  refused:"Claude couldn't answer that one. Try rephrasing it.",
+  empty_completion:"No answer came back. Try asking for something shorter.",
+  bad_key:"Your API key wasn't accepted. Check it under Progress, then Settings.",
+  network:"No internet connection. Claude features need to be online.",
+  no_ai:"Add your Anthropic API key under Progress, then Settings, to switch this on."
+};
+function noAiNote(){ return STANDALONE ? "Claude features switch on when you add an API key under Progress, then Settings." : "Claude features work when this page is opened in the Claude app."; }
+
+/* ---------- Claude calls ---------- */
+async function aiText(input, opts){
+  opts = opts||{};
+  if(SAMPLE){
+    const o = {};
+    if(opts.onText) o.onText = opts.onText;
+    if(opts.tier) o.modelTier = opts.tier;
+    if(opts.cache !== undefined) o.cache = opts.cache;
+    if(opts.signal) o.signal = opts.signal;
+    const r = await SAMPLE(input, o); return {text:r.text, truncated:r.truncated, sources:[]};
+  }
+  const key = apiKey(); if(!key) throw {code:"no_ai"};
+  const messages = typeof input==="string" ? [{role:"user",content:input}] : input;
+  const body = {model:apiModel(), max_tokens:opts.max||1400, messages:messages};
+  if(opts.search) body.tools = [{type:"web_search_20250305", name:"web_search", max_uses:opts.uses||5}];
+  let res, data;
+  try{
+    res = await fetch("https://api.anthropic.com/v1/messages", {method:"POST", signal:opts.signal, headers:{"content-type":"application/json","x-api-key":key,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"}, body:JSON.stringify(body)});
+  }catch(e){ if(e && e.name==="AbortError") throw {code:"cancelled"}; throw {code:"network"}; }
+  try{ data = await res.json(); }catch(e){ data = {}; }
+  if(!res.ok){
+    const msg = (data && data.error && data.error.message) || ("HTTP "+res.status);
+    throw {code: res.status===401||res.status===403 ? "bad_key" : res.status===429 ? "rate_limited" : res.status>=500 ? "upstream_error" : "api_error", message:msg};
+  }
+  const blocks = (data.content||[]).filter(b=>b.type==="text");
+  const sources = []; const seen = new Set();
+  blocks.forEach(b=>(b.citations||[]).forEach(c=>{ if(c.url && !seen.has(c.url)){ seen.add(c.url); sources.push({u:c.url, t:c.title||c.url}); } }));
+  const text = blocks.map(b=>b.text).join("").trim();
+  if(!text) throw {code:"empty_completion"};
+  if(opts.onText) opts.onText({text:text});
+  return {text:text, truncated:data.stop_reason==="max_tokens", sources:sources};
+}
+function errHTML(e){
+  const code = e && e.code;
+  if(code==="api_error") return '<p class="hint">The API returned an error: '+esc(e.message||"")+'. If it mentions the model, pick another model in Settings.</p>';
+  return '<p class="hint">'+esc(ERR[code]||"Couldn't get an answer. Tap the button to try again.")+'</p>';
+}
+async function askAI(prompt, out, opts){
+  opts = opts||{};
+  if(!aiOn()){ out.innerHTML = '<p class="thinking">'+esc(noAiNote())+'</p>'; return null; }
+  out.innerHTML = '<p class="thinking">Thinking…</p>';
+  const btn = opts.button; if(btn) btn.disabled = true;
+  try{
+    const r = await aiText(prompt, Object.assign({}, opts, {onText:({text})=>{ out.innerHTML = md(text); }}));
+    out.innerHTML = md(r.text) + sourcesHTML(r.sources) + (r.truncated? '<p class="hint">Cut short. Ask for less at a time.</p>':'');
+    return r;
+  }catch(e){
+    if(e && e.code==="cancelled"){ out.innerHTML=""; return null; }
+    out.innerHTML = (e && e.text && e.code!=="refused" ? md(e.text) : "") + errHTML(e);
+    return null;
+  }finally{ if(btn) btn.disabled = false; }
+}
+function sourcesHTML(src){ if(!src||!src.length) return ""; return '<h3>Sources</h3><ul>'+src.slice(0,8).map(s=>'<li><a href="'+esc(s.u)+'" target="_blank" rel="noopener">'+esc(s.t)+'</a></li>').join("")+'</ul>'; }
+
+/* ---------- live headlines (standalone only) ---------- */
+let hnState = {status:"idle", items:[]};
+async function loadHeadlines(force){
+  if(!STANDALONE) return;
+  const cached = (()=>{ try{ return JSON.parse(lget("hn","null")); }catch(e){ return null; } })();
+  const sig = today()+"|"+weekOf("tech")+"|"+weekOf("cfo");
+  if(!force && cached && cached.sig===sig){ hnState = {status:"ok", items:cached.items}; return; }
+  if(hnState.status==="loading") return;
+  hnState = {status:"loading", items:[]};
+  const since = Math.floor(Date.now()/1000) - 3*86400;
+  const kws = HN_KEYS.tech[weekOf("tech")-1].concat(HN_KEYS.cfo[weekOf("cfo")-1]);
+  try{
+    const results = await Promise.all(kws.map((k,i)=>fetch("https://hn.algolia.com/api/v1/search?tags=story&hitsPerPage=6&query="+encodeURIComponent(k)+"&numericFilters="+encodeURIComponent("created_at_i>"+since+",points>10"))
+      .then(r=>r.ok?r.json():{hits:[]}).then(j=>(j.hits||[]).map(h=>({id:h.objectID, t:h.title, u:h.url||("https://news.ycombinator.com/item?id="+h.objectID), p:h.points||0, lane:i<2?"tech":"cfo"}))).catch(()=>[])));
+    const seen = new Set(); let items = [];
+    results.flat().forEach(h=>{ if(h.t && !seen.has(h.id)){ seen.add(h.id); items.push(h); } });
+    items.sort((a,b)=>b.p-a.p); items = items.slice(0,10);
+    hnState = {status: items.length? "ok":"empty", items:items};
+    if(items.length) lset("hn", JSON.stringify({sig:sig, items:items}));
+  }catch(e){ hnState = {status:"error", items:[]}; }
+  if(tab==="pulse" || tab==="today") render();
+}
+function headlinesHTML(max){
+  if(!STANDALONE) return "";
+  if(hnState.status==="loading" || hnState.status==="idle") return '<p class="hint">Loading live headlines…</p>';
+  if(hnState.status==="error"||hnState.status==="empty") return '<p class="hint">No live headlines right now. Check your connection, or use the sources below.</p>';
+  return '<ul class="src">'+hnState.items.slice(0,max||10).map(h=>'<li class="hl"><a href="'+esc(h.u)+'" target="_blank" rel="noopener"><b>'+esc(h.t)+'</b><span>'+(h.lane==="cfo"?"Business and finance":"Technology")+', '+h.p+' points</span></a><button class="btn ghost small dec" data-dec="'+esc(h.t)+'">Decode</button></li>').join("")+'</ul><p class="hint">From Hacker News, filtered to this week\'s topics on both lines. It leans towards tech; use the sources below for Indian business news.</p>';
+}
+
+/* ---------- daily brief (standalone + key) ---------- */
+function briefCached(){ try{ const b=JSON.parse(lget("brief","null")); return b && b.d===today()? b : null; }catch(e){ return null; } }
+function briefHTML(){
+  if(!STANDALONE) return "";
+  const b = briefCached();
+  if(!apiKey()) return '<p class="hint">With an API key added in Settings, this becomes a fresh briefing every morning: today\'s tech and finance news, why it matters to you, and a scenario to think about.</p>';
+  return '<div class="out" id="briefOut">'+(b? md(b.text)+sourcesHTML(b.src) : '')+'</div><div class="btns"><button class="btn '+(b?'ghost':'primary')+' small" id="briefGo">'+(b?'Refresh briefing':'Get today\'s briefing')+'</button></div>'+(b?'':'<p class="hint">Takes about 20 to 40 seconds. It searches the web, so it costs a little more than other features.</p>');
+}
+async function runBrief(btn){
+  const out = $("#briefOut");
+  const tw = WEEKS[weekOf("tech")-1].t, cw = CFO_WEEKS[weekOf("cfo")-1].t;
+  const p = profile()+"\n\nToday is "+new Date().toDateString()+". Use web search to find news from the last 48 hours, then write today's briefing for this learner. This week they are studying '"+tw+"' on their tech line and '"+cw+"' on their CFO line, so prefer stories that connect to those.\n\nUse exactly these headings:\n### Tech and IS\nThree items on enterprise technology (cloud, cybersecurity, AI in enterprises, major vendors, IT delivery), with India or APAC relevance where possible.\n### Finance and the CFO agenda\nTwo items on corporate finance (Indian or APAC markets, regulation, results, M&A, CFO moves).\nFor each item write one bullet: **short headline**, what happened in one sentence, why it matters to them in one sentence, then 'Say:' and a line they could use in a meeting or interview.\n### Today's scenario\nA three-sentence workplace situation inspired by one story, ending with a question for them to think about.\n### Word of the day\nOne term from today's news with a plain meaning.\n\nOnly report things you found in search results. Don't invent figures. Under 450 words.";
+  const r = await askAI(p, out, {button:btn, search:true, uses:5, max:2200, tier:"default"});
+  if(r){ lset("brief", JSON.stringify({d:today(), text:r.text, src:r.sources})); markActive(); save(); }
+}
+
+/* ---------- navigation ---------- */
+const TABS = [
+ {k:"today", n:"Today", i:'<circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/>'},
+ {k:"path", n:"Path", i:'<path d="M6 3v18"/><circle cx="6" cy="6" r="2"/><circle cx="6" cy="12" r="2"/><circle cx="6" cy="18" r="2"/><path d="M11 6h8M11 12h8M11 18h5"/>'},
+ {k:"cards", n:"Cards", i:'<rect x="4" y="6" width="14" height="12" rx="2"/><path d="M8 3h11a2 2 0 0 1 2 2v10"/>'},
+ {k:"speak", n:"Speak", i:'<path d="M4 5h16v10H9l-5 4z"/>'},
+ {k:"pulse", n:"Pulse", i:'<path d="M3 12h4l2-6 4 12 2-6h6"/>'}
+];
+let tab = lget("tab","today"), sub = null, pathTrack = null, speakSeg = lget("seg","interview");
+if(!TABS.some(t=>t.k===tab) && tab!=="me") tab="today";
+function go(k, s){ tab = k; sub = s||null; lset("tab", k); render(); window.scrollTo(0,0); }
+function renderNav(){ $("#nav").innerHTML = TABS.map(t=>'<button data-tab="'+t.k+'"'+(tab===t.k?' aria-current="page"':'')+'><svg viewBox="0 0 24 24" aria-hidden="true">'+t.i+'</svg>'+t.n+'</button>').join(""); }
+document.addEventListener("click", e=>{ const b=e.target.closest("[data-tab]"); if(b) go(b.dataset.tab); });
+$("#streakBtn").onclick = ()=>go("me");
+
+function render(){
+  renderNav(); refreshAI();
+  $("#streakN").textContent = streak();
+  const v = $("#view");
+  if(tab==="today") v.innerHTML = vToday();
+  else if(tab==="path") v.innerHTML = sub ? vLesson(sub) : vPath();
+  else if(tab==="cards") v.innerHTML = vCards();
+  else if(tab==="speak") v.innerHTML = vSpeak();
+  else if(tab==="pulse") v.innerHTML = vPulse();
+  else if(tab==="me") v.innerHTML = vMe();
+  bind();
+}
+
+/* ---------- Today ---------- */
+function vToday(){
+  const tr = todayTrack(), n = nextLesson(tr), other = tr==="tech"?"cfo":"tech", bt = burstsToday();
+  const doneN = BURSTS.filter(b=>bt[b.k]).length;
+  const deepDoneToday = Object.values(S.lessons).includes(today());
+  let hero;
+  if(n){
+    const wk = TRACKS[tr].weeks[n.week-1];
+    const segs = wk.days.map((d,j)=>'<span class="'+(S.lessons[TRACKS[tr].pre+n.week+"d"+(j+1)]?"on":"")+'"></span>').join("");
+    hero = '<div class="deep"><div class="meta">Focused 45 minutes on the '+TRACKS[tr].n+(deepDoneToday?' (one done today, keep going if you like)':'')+'</div>'+
+      '<h1>'+esc(n.t)+'</h1><div class="meta">Week '+n.week+' of '+TRACKS[tr].weeks.length+': '+esc(n.mod)+'</div>'+
+      '<div class="track" aria-label="This week\'s sessions">'+segs+'</div>'+
+      '<div class="btns"><button class="btn signal" data-open="'+n.id+'">Start session</button>'+(nextLesson(other)?'<button class="btn onpine small" id="swap">Do the '+TRACKS[other].n+' instead</button>':'')+'</div></div>';
+  } else {
+    hero = '<div class="deep"><h1>Both lines complete</h1><p>Revisit any station, keep your cards spaced, and keep interview reps going.</p><button class="btn signal" data-tab="path">Open the path</button></div>';
+  }
+  const iq = INTERVIEW[hash(today()+"iv")%INTERVIEW.length];
+  const cc = CFO_CARDS.filter(cardOpen); const fc = cc[hash(today()+"cfo")%cc.length];
+  return '<p class="lede">'+new Date().toLocaleDateString(undefined,{weekday:"long",day:"numeric",month:"long"})+'</p>'+
+  '<div class="sec">'+hero+'</div>'+
+  '<div class="sec"><h2>Short breaks</h2><p class="lede">Six bursts for your 5 to 10 minute gaps, in any order.</p>'+
+  '<ul class="bursts">'+BURSTS.map(b=>'<li class="'+(bt[b.k]?"done":"")+'"><button data-burst="'+b.k+'"><span class="tick" aria-hidden="true"></span><span><span class="bt">'+b.t+'</span><br><span class="bd">'+b.d+'</span></span><span class="min">'+b.m+'</span></button></li>').join("")+'</ul>'+
+  '<div class="meter"><span>'+doneN+' of 6 done today</span><span>'+dueCards().length+' cards due</span></div></div>'+
+  '<div class="sec"><h2>Today\'s mix</h2><p class="lede">Changes every day.</p>'+
+  '<div class="mix"><div class="mi"><span class="ml">Interview question</span><p class="mq">'+esc(iq.q)+'</p><button class="btn ghost small" data-burst="interview">Practise it</button></div>'+
+  '<div class="mi"><span class="ml">CFO idea</span><p class="mq">'+esc(fc.t)+'</p><p>'+esc(fc.d)+'</p><p class="hint">'+esc(fc.p)+'</p></div>'+
+  (STANDALONE? '<div class="mi"><span class="ml">Today\'s briefing</span>'+briefHTML()+'</div>' : '')+'</div></div>'+
+  '<div class="sec ask"><label for="termQ">Heard a term you didn\'t follow?</label>'+
+  '<div class="inline"><input class="field" id="termQ" placeholder="e.g. canary release, DSO, Pillar Two" autocomplete="off"><button class="btn primary small ai-only" id="termGo">Explain</button></div>'+
+  '<p class="hint ai-off">'+esc(noAiNote())+' Meanwhile, search the glossary on the Cards tab.</p>'+
+  '<div class="out" id="termOut"></div><div class="btns" id="termAdd" hidden><button class="btn ghost small" id="termCard">Add to my cards</button></div></div>';
+}
+function explainTerm(){
+  const q = $("#termQ").value.trim(); if(!q) return;
+  S.log.unshift({d:today(), t:q}); S.log = S.log.slice(0,200); markActive(); save();
+  const p = profile()+"\n\nExplain the term \""+q+"\" as it would be used in an enterprise IS or corporate finance conversation. Use exactly these headings:\n### Plain meaning\n(2 sentences)\n### Everyday analogy\n(1 sentence)\n### Why it matters to me\n(2 sentences, for a PMO manager heading towards CFO)\n### A smart question to ask\n(1 question)\nUnder 150 words.";
+  askAI(p, $("#termOut"), {tier:"quick", button:$("#termGo")}).then(r=>{ if(r){ $("#termAdd").hidden=false; $("#termCard").onclick=()=>{ addCustomCard(q,r.text); $("#termAdd").hidden=true; }; } });
+}
+function addCustomCard(term, text){
+  const grab = h=>{ const m = text.split(/###\s*/).find(x=>x.toLowerCase().startsWith(h)); return m? m.slice(h.length).replace(/\*\*/g,"").trim().split("\n").join(" ") : ""; };
+  S.custom.push({id:"u"+Date.now(), m:0, t:term, d:grab("plain meaning")||text.slice(0,240), p:grab("why it matters to me"), mine:true});
+  save(); toast("Added to your cards");
+}
+
+/* ---------- Path ---------- */
+function vPath(){
+  const tr = pathTrack || todayTrack(); const T = TRACKS[tr]; const w = weekOf(tr);
+  return '<h1>Your two lines</h1><p class="lede">The tech line makes you fluent in your current role. The CFO line builds the finance depth for where you\'re heading. Today\'s session alternates between them; change the mix in Settings.</p>'+
+  '<div class="seg" role="group" aria-label="Line">'+Object.keys(TRACKS).map(k=>'<button data-ptrack="'+k+'" aria-pressed="'+(k===tr)+'">'+TRACKS[k].n+' <small>'+doneCount(k)+'/'+TRACKS[k].total+'</small></button>').join("")+'</div>'+
+  '<ol class="line'+(tr==="cfo"?" gold":"")+'">'+T.weeks.map((wk,i)=>{
+    const n=i+1, done = wk.days.filter((d,j)=>S.lessons[T.pre+n+"d"+(j+1)]).length;
+    const cls = done===5?"complete":(n===w?"current":""); const open = n===w;
+    return '<li class="stn '+cls+'"><span class="dot" aria-hidden="true"></span>'+
+      '<button data-week="'+tr+n+'" aria-expanded="'+open+'"><span class="wk">Week '+n+(n===w?', you are here':'')+'</span><br><span class="nm">'+esc(wk.t)+'</span><br><span class="sb">'+esc(wk.s)+'</span><span class="bar"><span style="width:'+(done*20)+'%"></span></span></button>'+
+      '<ul class="days" id="wk'+tr+n+'"'+(open?'':' hidden')+'>'+wk.days.map((d,j)=>{const id=T.pre+n+"d"+(j+1); return '<li><button data-open="'+id+'"><span>'+(d.case?'Friday case: ':'Day '+(j+1)+': ')+esc(d.case?d.t.replace(/^Case: /,""):d.t)+'</span>'+(S.lessons[id]?'<span class="ok">Done</span>':'')+'</button></li>';}).join("")+'</ul></li>';
+  }).join("")+'</ol><p class="hint">Weekends: Saturday for a card review, one roleplay and one interview rep. Keep Sunday light.</p>';
+}
+
+/* ---------- Lesson ---------- */
+let timer = null;
+function getTimer(){ try{ return JSON.parse(lget("timer","null")); }catch(e){ return null; } }
+function setTimer(v){ lset("timer", v? JSON.stringify(v) : null); }
+function vLesson(id){
+  const l = LESSONS.find(x=>x.id===id); if(!l) return vPath();
+  const N = S.notes[id] || {}; const tm = getTimer(); const running = tm && tm.id===id;
+  return '<button class="back" data-tab="path">Back to the path</button>'+
+  '<p class="lede">'+TRACKS[l.track].n+', week '+l.week+': '+esc(l.mod)+'</p><h1>'+esc(l.t)+'</h1>'+
+  '<div class="sec timer"><div><div class="clock" id="clock">'+(running?"":"45:00")+'</div><div class="pl" id="phaseLbl">'+(running?"":"12 learn, 15 apply, 10 speak, 8 lock in")+'</div></div>'+
+  '<button class="btn small '+(running?'ghost':'primary')+'" id="timerBtn">'+(running?'Stop':'Start 45 min')+'</button></div>'+
+  '<div class="phase" data-ph="0"><div class="ph">'+(l.case?'Learn: the situation':'Learn')+'</div><ul>'+l.k.map(k=>'<li>'+esc(k)+'</li>').join("")+'</ul>'+
+   '<div class="ai-only"><button class="btn ghost small" id="deeper">'+(l.case?'Show how a senior leader would think about it':'Teach me one level deeper')+'</button><div class="out" id="deepOut"></div></div></div>'+
+  '<div class="phase" data-ph="1"><div class="ph">Apply</div><p>'+esc(l.ex)+'</p>'+
+   '<textarea class="field" id="nApply" placeholder="Your notes or answer">'+esc(N.apply||"")+'</textarea>'+
+   (l.case?'<div class="ai-only btns"><button class="btn ghost small" id="caseCoach">Get feedback on my answer</button></div><div class="out" id="caseOut"></div>':'')+'</div>'+
+  '<div class="phase" data-ph="2"><div class="ph">Speak</div><p>Say this out loud three times, then make it yours:</p><div class="say">'+esc(l.say)+'</div>'+
+   '<p>Now explain today\'s main idea out loud in about a minute, as if to a stakeholder or an interviewer. Tap the microphone on your keyboard to dictate what you said.</p>'+
+   '<textarea class="field" id="nSpeak" placeholder="Dictate or type your explanation">'+esc(N.speak||"")+'</textarea>'+
+   '<div class="ai-only btns"><button class="btn ghost small" id="speakFb">Get feedback</button></div><div class="out" id="speakOut"></div></div>'+
+  '<div class="phase" data-ph="3"><div class="ph">Lock in</div><p>Write three lines you\'d want to remember a month from now.</p>'+
+   '<textarea class="field" id="nTake" placeholder="1.&#10;2.&#10;3.">'+esc(N.take||"")+'</textarea>'+
+   '<div class="btns"><button class="btn '+(S.lessons[id]?'ghost':'primary')+'" id="complete">'+(S.lessons[id]?'Completed. Mark as not done':'Mark session complete')+'</button></div></div>';
+}
+function bindLesson(id){
+  const l = LESSONS.find(x=>x.id===id); if(!l) return;
+  const lens = l.track==="cfo" ? "Frame it for someone moving from an IS PMO role towards finance leadership and CFO roles, with Indian and APAC examples where relevant." : "Use an APAC enterprise IS example.";
+  const saveNotes = ()=>{ const a=$("#nApply"), s=$("#nSpeak"), t=$("#nTake"); if(!a||!s||!t) return; S.notes[id] = {apply:a.value, speak:s.value, take:t.value}; save(); };
+  ["#nApply","#nSpeak","#nTake"].forEach(s=>{ const el=$(s); if(el) el.addEventListener("input", ()=>{ clearTimeout(el._t); el._t=setTimeout(saveNotes,600); }); });
+  const deeper = $("#deeper");
+  if(deeper) deeper.onclick = ()=>{
+    const p = l.case
+      ? profile()+"\n\nPractice case: \""+l.t+"\". Situation: "+l.k.join(" ")+"\nQuestions: "+l.ex+"\n\nShow how an experienced leader would think it through. "+lens+" Headings: ### First moves ### What to ask, and whom ### Options and trade-offs ### What to say to leadership. Bullets, plain English, under 350 words."
+      : profile()+"\n\nTeach a short lesson titled \""+l.t+"\". They have already read: "+l.k.join(" ")+"\n\nGo one level deeper. "+lens+" Headings: ### A real-world example ### Three terms you'll hear (term: plain meaning) ### Two common mistakes ### Three smart questions to ask. Short bullets, under 400 words.";
+    askAI(p, $("#deepOut"), {button:deeper, cache:{gcTime:86400000}});
+  };
+  const sf = $("#speakFb");
+  if(sf) sf.onclick = ()=>{
+    const t = $("#nSpeak").value.trim(); if(t.length<20){ toast("Say or type a bit more first"); return; }
+    askAI(profile()+"\n\nThey practised explaining \""+l.t+"\" out loud in about a minute. Their words (from voice dictation; ignore dictation errors):\n\"\"\"\n"+t.slice(0,4000)+"\n\"\"\"\n\nHeadings: ### What worked (2 bullets) ### Accuracy check ### A clearer 60-second version (about 120 words, in their voice) ### One phrase to reuse. Direct and specific, under 300 words.", $("#speakOut"), {button:sf, cache:false});
+  };
+  const cc = $("#caseCoach");
+  if(cc) cc.onclick = ()=>{
+    const t = $("#nApply").value.trim(); if(t.length<20){ toast("Write your answer first"); return; }
+    askAI(profile()+"\n\nPractice case: \""+l.t+"\". Situation: "+l.k.join(" ")+"\nQuestions: "+l.ex+"\n\nTheir answer:\n\"\"\"\n"+t.slice(0,5000)+"\n\"\"\"\n\nCoach them as a "+(l.track==="cfo"?"seasoned CFO":"senior PMO director")+" would. Headings: ### Strong points ### Gaps or risks you missed ### How I'd sharpen it ### Score (out of 10, one line why). Under 320 words.", $("#caseOut"), {button:cc, cache:false});
+  };
+  $("#complete").onclick = ()=>{
+    saveNotes();
+    if(S.lessons[id]) delete S.lessons[id];
+    else { S.lessons[id] = today(); S.pick = null; markActive(); stopTimer(); toast("Session complete"); }
+    save(); render();
+  };
+  $("#timerBtn").onclick = ()=>{ const tm=getTimer(); if(tm && tm.id===id){ stopTimer(); render(); } else { setTimer({id:id, start:Date.now()}); render(); } };
+  startTick();
+}
+function stopTimer(){ setTimer(null); clearInterval(timer); timer=null; }
+function startTick(){
+  clearInterval(timer);
+  const tm = getTimer(); if(!tm) return;
+  const tick = ()=>{
+    const c = $("#clock"); if(!c) return;
+    const el = Math.floor((Date.now()-tm.start)/1000), left = Math.max(0, 45*60-el);
+    c.textContent = String(Math.floor(left/60)).padStart(2,"0")+":"+String(left%60).padStart(2,"0");
+    let acc=0, ph=PHASES.length-1;
+    for(let i=0;i<PHASES.length;i++){ acc+=PHASES[i].m*60; if(el<acc){ ph=i; break; } }
+    $("#phaseLbl").textContent = left===0 ? "Time's up. Lock in and mark complete." : "Now: "+PHASES[ph].n+" ("+PHASES[ph].m+" min)";
+    document.querySelectorAll(".phase").forEach(p=>p.classList.toggle("live", +p.dataset.ph===ph && left>0));
+    if(left===0) clearInterval(timer);
+  };
+  tick(); timer = setInterval(tick, 1000);
+}
+
+/* ---------- Cards ---------- */
+function vCards(){
+  const un = unlockedCards(), due = dueCards();
+  const box = [0,0,0,0,0]; un.forEach(c=>{ const r=S.cards[c.id]; if(r) box[Math.min(r.b,5)-1]++; });
+  const fresh = un.filter(c=>!S.cards[c.id]).length, locked = ALLCARDS.length - ALLCARDS.filter(cardOpen).length;
+  const groups = {}; un.forEach(c=>{ const g=cardGroup(c); (groups[g]=groups[g]||[]).push(c); });
+  return '<h1>Cards</h1><p class="lede">Spaced review across both lines. Cards you know come back less often. New weeks unlock as you move along each line.</p>'+
+  '<div class="sec"><div class="btns"><button class="btn primary" data-burst="cards">Review '+due.length+' due</button><button class="btn ghost" id="quizBtn">Quick quiz</button></div>'+
+  '<div class="boxes">'+box.map((n,i)=>'<div><b>'+n+'</b><span>'+["Learning","Familiar","Good","Strong","Mastered"][i]+'</span></div>').join("")+'</div>'+
+  '<p class="hint">'+fresh+' unlocked cards not yet seen. '+locked+' more unlock later.</p></div>'+
+  '<div class="sec"><label for="cfind" class="hint">Search the glossary</label><input class="field" id="cfind" placeholder="Type to filter" autocomplete="off"></div>'+
+  '<div class="glossary" id="gloss">'+Object.keys(groups).map(g=>'<h3 style="margin-top:18px">'+esc(g)+'</h3>'+groups[g].map(c=>'<details data-q="'+esc((c.t+" "+c.d).toLowerCase())+'"><summary>'+esc(c.t)+'</summary><p>'+esc(c.d)+'</p>'+(c.p?'<p class="hint">'+esc(c.p)+'</p>':'')+(c.mine?'<button class="btn ghost small" data-del="'+c.id+'" style="margin-top:6px">Remove card</button>':'')+'</details>').join("")).join("")+'</div>';
+}
+function cardSession(){
+  const q = dueCards().sort((a,b)=>(S.cards[a.id]?0:1)-(S.cards[b.id]?0:1)).slice(0,10);
+  if(!q.length){ sheet("Flashcards", '<p>Nothing due. You\'re up to date.</p><div class="btns"><button class="btn primary" id="cdone">Mark burst done</button></div>', ()=>{ $("#cdone").onclick=()=>{doneBurst("cards"); closeSheet(); render();}; }); return; }
+  let i=0, shown=false;
+  const draw = ()=>{
+    const body = $("#sheetBody").querySelector(".sbody");
+    if(i>=q.length){ doneBurst("cards"); body.innerHTML='<p>Done: '+q.length+' cards reviewed.</p><div class="btns"><button class="btn primary" id="cfin">Close</button></div>'; $("#cfin").onclick=()=>{closeSheet(); render();}; return; }
+    const c=q[i];
+    body.innerHTML = '<div class="count">Card '+(i+1)+' of '+q.length+(c.m>100?', CFO line':c.m>0?', tech line':'')+'</div><div class="flash"><div class="term">'+esc(c.t)+'</div>'+(shown?'<div class="def">'+esc(c.d)+'</div>'+(c.p?'<div class="pmo">'+esc(c.p)+'</div>':''):'<p class="hint">Say the meaning out loud, then reveal.</p>')+'</div>'+
+      '<div class="btns">'+(shown?'<button class="btn ghost" id="again" style="flex:1">Again</button><button class="btn primary" id="got" style="flex:1">Got it</button>':'<button class="btn primary" id="reveal" style="flex:1">Reveal</button>')+'</div>';
+    if(!shown) $("#reveal").onclick=()=>{shown=true; draw();};
+    else {
+      $("#again").onclick=()=>{ S.cards[c.id]={b:1,d:today()}; q.push(c); i++; shown=false; save(); draw(); };
+      $("#got").onclick=()=>{ const r=S.cards[c.id]; const b=Math.min((r?r.b:0)+1,5); S.cards[c.id]={b:b,d:addDays(today(),GAPS[b])}; i++; shown=false; save(); draw(); };
+    }
+  };
+  sheet("Flashcards", "", draw);
+}
+function quizSession(){
+  const pool = unlockedCards(); const all = allCards();
+  if(pool.length<4){ sheet("Quick quiz","<p>Unlock a few more cards first.</p>"); return; }
+  const pick = arr=>arr[Math.floor(Math.random()*arr.length)];
+  const qs = [], used = new Set();
+  while(qs.length<3){ const c=pick(pool); if(used.has(c.id)) continue; used.add(c.id);
+    const opts=[c]; while(opts.length<4){ const o=pick(all); if(!opts.includes(o)) opts.push(o); }
+    qs.push({c:c, o:opts.sort(()=>Math.random()-.5)}); }
+  let i=0, score=0;
+  const draw=()=>{
+    const body=$("#sheetBody").querySelector(".sbody");
+    if(i>=qs.length){ markActive(); save(); body.innerHTML='<h2>'+score+' of 3</h2><p>'+(score===3?'Clean sweep.':'The ones you missed are now due again in your cards.')+'</p><div class="btns"><button class="btn primary" id="qfin">Close</button></div>'; $("#qfin").onclick=()=>{closeSheet(); render();}; return; }
+    const q=qs[i];
+    body.innerHTML='<div class="count">Question '+(i+1)+' of 3</div><h2 style="margin-bottom:12px">What does "'+esc(q.c.t)+'" mean?</h2>'+q.o.map((o,j)=>'<button class="opt" data-j="'+j+'">'+esc(o.d)+'</button>').join("");
+    body.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{
+      const ok = q.o[+b.dataset.j]===q.c;
+      body.querySelectorAll(".opt").forEach((x,j)=>{ x.disabled=true; if(q.o[j]===q.c) x.classList.add("right"); });
+      if(!ok){ b.classList.add("wrong"); S.cards[q.c.id]={b:1,d:today()}; save(); } else score++;
+      const nx=document.createElement("button"); nx.className="btn primary"; nx.textContent=i<2?"Next question":"See score"; nx.style.marginTop="6px"; nx.onclick=()=>{i++; draw();}; body.appendChild(nx);
+    });
+  };
+  sheet("Quick quiz","",draw);
+}
+
+/* ---------- Interview ---------- */
+function interviewSheet(q){
+  q = q || INTERVIEW[hash(today()+"iv")%INTERVIEW.length];
+  const stories = (S.stories||[]);
+  sheet("Interview rep",
+   '<p class="hint">'+esc(q.c)+'</p><div class="say">'+esc(q.q)+'</div>'+
+   '<p><b>What they\'re really testing:</b> '+esc(q.w)+'</p>'+
+   '<div class="timer" style="position:static"><div><div class="clock" id="ivClock">2:00</div><div class="pl">Answer out loud, then dictate it below</div></div><button class="btn primary small" id="ivStart">Start 2 min</button></div>'+
+   '<textarea class="field" id="ivIn" placeholder="What I said" style="margin-top:12px"></textarea>'+
+   (stories.length? '<p class="hint">Your story bank has '+stories.length+' stor'+(stories.length===1?'y':'ies')+'. Use one if it fits.</p>':'')+
+   '<details class="chk"><summary>Self-check</summary><label><input type="checkbox"> Clear first sentence that answers the question</label><label><input type="checkbox"> One specific example, with a number</label><label><input type="checkbox"> Situation, task, action, result all present</label><label><input type="checkbox"> Under two minutes</label><label><input type="checkbox"> Ended by linking to the role</label></details>'+
+   '<div class="btns"><button class="btn ghost small" id="ivHint">Show a strong structure</button><button class="btn ghost small ai-only" id="ivFb">Get interviewer feedback</button><button class="btn ghost small" id="ivNext">Another question</button><button class="btn primary small" id="ivDone">Mark done</button></div>'+
+   '<div class="out" id="ivOut"></div>',
+   ()=>{
+    let t=null;
+    $("#ivStart").onclick=()=>{ clearInterval(t); const st=Date.now(); const ck=$("#ivClock"); t=setInterval(()=>{ if(!document.body.contains(ck)){clearInterval(t);return;} const left=Math.max(0,120-Math.floor((Date.now()-st)/1000)); ck.textContent=Math.floor(left/60)+":"+String(left%60).padStart(2,"0"); if(!left){clearInterval(t); toast("Two minutes. Wrap up.");} },500); };
+    $("#ivHint").onclick=()=>{ $("#ivOut").innerHTML='<h3>A strong structure</h3><p>'+esc(q.h)+'</p>'; };
+    $("#ivNext").onclick=()=>{ clearInterval(t); interviewSheet(INTERVIEW[Math.floor(Math.random()*INTERVIEW.length)]); };
+    $("#ivDone").onclick=()=>{ S.iv[q.q]=today(); doneBurst("interview"); closeSheet(); render(); };
+    const fb=$("#ivFb"); if(fb) fb.onclick=()=>{ const a=$("#ivIn").value.trim(); if(a.length<20){toast("Say or type your answer first");return;}
+      askAI(profile()+"\n\nInterview practice. Question: \""+q.q+"\". What interviewers test: "+q.w+"\nTheir spoken answer (from dictation; ignore dictation errors):\n\"\"\"\n"+a.slice(0,5000)+"\n\"\"\"\n\nGive feedback as an experienced interviewer for senior finance and transformation roles in India. Headings: ### First impression (one line) ### What worked ### What an interviewer would doubt or probe ### A stronger answer (about 150 words, in their voice, using only facts they gave or clearly marked placeholders like [number]) ### Score out of 10. Under 350 words.", $("#ivOut"), {button:fb, cache:false}); };
+   });
+}
+function storySheet(id){
+  const s = (S.stories||[]).find(x=>x.id===id) || {id:"s"+Date.now(), title:"", tags:[], s:"", t:"", a:"", r:""};
+  const isNew = !(S.stories||[]).some(x=>x.id===s.id);
+  sheet(isNew?"New story":"Edit story",
+   '<label class="hint" for="stT">Title</label><input class="field" id="stT" value="'+esc(s.title)+'" placeholder="e.g. The acquisition diligence">'+
+   '<p class="hint" style="margin-top:12px">Good for questions about</p><div class="chips cwrap" id="stTags">'+STORY_TAGS.map(t=>'<button class="chip" data-tag="'+esc(t)+'" aria-pressed="'+s.tags.includes(t)+'">'+esc(t)+'</button>').join("")+'</div>'+
+   ['s','t','a','r'].map(k=>'<label class="hint" for="st'+k+'" style="display:block;margin-top:12px">'+({s:"Situation: where and when, in one or two sentences",t:"Task: what you were responsible for",a:"Action: what you did, in steps, using 'I'",r:"Result: what changed, with a number"}[k])+'</label><textarea class="field" id="st'+k+'" style="min-height:80px">'+esc(s[k])+'</textarea>').join("")+
+   '<div class="btns"><button class="btn primary" id="stSave">Save story</button><button class="btn ghost ai-only" id="stTight">Tighten into a 90-second answer</button>'+(isNew?'':'<button class="btn ghost" id="stDel">Delete</button>')+'</div><div class="out" id="stOut"></div>'+
+   '<p class="hint">Stories stay on this device'+(IN_CLAUDE?' and your Claude account':'')+'. They never go into the app\'s code.</p>',
+   ()=>{
+    document.querySelectorAll("#stTags .chip").forEach(b=>b.onclick=()=>b.setAttribute("aria-pressed", b.getAttribute("aria-pressed")!=="true"));
+    const read=()=>({id:s.id, title:$("#stT").value.trim()||"Untitled story", tags:[...document.querySelectorAll('#stTags .chip[aria-pressed="true"]')].map(b=>b.dataset.tag), s:$("#sts").value, t:$("#stt").value, a:$("#sta").value, r:$("#str").value});
+    $("#stSave").onclick=()=>{ const v=read(); S.stories=(S.stories||[]).filter(x=>x.id!==v.id).concat([v]); markActive(); save(); toast("Story saved"); closeSheet(); render(); };
+    const del=$("#stDel"); if(del) del.onclick=()=>{ if(confirm("Delete this story?")){ S.stories=S.stories.filter(x=>x.id!==s.id); save(); closeSheet(); render(); } };
+    const tg=$("#stTight"); if(tg) tg.onclick=()=>{ const v=read(); if((v.s+v.t+v.a+v.r).length<40){toast("Fill in a bit more first");return;}
+      askAI(profile()+"\n\nTurn this STAR story into a spoken interview answer of about 90 seconds (roughly 220 words). Use only the facts given; mark anything missing as [placeholder]. Then add ### Questions it answers well (3 bullets) and ### One follow-up an interviewer will ask.\nTitle: "+v.title+"\nSituation: "+v.s+"\nTask: "+v.t+"\nAction: "+v.a+"\nResult: "+v.r, $("#stOut"), {button:tg, cache:false}); };
+   });
+}
+
+/* ---------- Speak ---------- */
+let sitIdx = 0, persona = null, chat = [], chatCtl = null, ivCat = "All";
+function vSpeak(){
+  const segs = [["interview","Interview"],["stories","Stories"],["phrases","Phrases"],["roleplay","Roleplay"]];
+  let body = "";
+  if(speakSeg==="interview"){
+    const cats = ["All"].concat([...new Set(INTERVIEW.map(q=>q.c))]);
+    const list = INTERVIEW.filter(q=>ivCat==="All"||q.c===ivCat);
+    body = '<p class="lede">For HR rounds and hiring managers. Pick a question, answer out loud for two minutes, then check it.</p>'+
+      '<div class="chips" role="group" aria-label="Category">'+cats.map(c=>'<button class="chip" data-ivcat="'+esc(c)+'" aria-pressed="'+(c===ivCat)+'">'+esc(c)+'</button>').join("")+'</div>'+
+      '<ul class="qlist">'+list.map(q=>{const i=INTERVIEW.indexOf(q); return '<li><button data-iv="'+i+'"><span>'+esc(q.q)+'</span>'+(S.iv[q.q]?'<span class="ok">Practised</span>':'')+'</button></li>';}).join("")+'</ul>';
+  } else if(speakSeg==="stories"){
+    const st = S.stories||[];
+    body = '<p class="lede">Interviewers remember stories, not adjectives. Build six to eight strong ones and you can answer almost any behavioural question.</p>'+
+      '<div class="btns"><button class="btn primary" id="stNew">Add a story</button></div>'+
+      (st.length? '<ul class="qlist">'+st.map(s=>'<li><button data-story="'+s.id+'"><span><b>'+esc(s.title)+'</b><br><small>'+esc(s.tags.join(", ")||"No tags yet")+'</small></span></button></li>').join("")+'</ul>' : '')+
+      '<h3 style="margin-top:18px">Stories worth writing</h3><ul class="phr plain">'+STORY_PROMPTS.map(p=>'<li>'+esc(p)+'</li>').join("")+'</ul>';
+  } else if(speakSeg==="phrases"){
+    const s = PHRASES[sitIdx];
+    body = '<p class="lede">Lines for real meetings. Say each one out loud and change a word so it sounds like you.</p><div class="chips" role="group" aria-label="Situations">'+PHRASES.map((p,i)=>'<button class="chip" data-sit="'+i+'" aria-pressed="'+(i===sitIdx)+'">'+esc(p.s)+'</button>').join("")+'</div>'+
+      '<ul class="phr">'+s.p.map(x=>'<li>'+esc(x)+'</li>').join("")+'</ul>';
+  } else {
+    body = '<p class="lede">A practice partner who pushes back. Includes an HR interviewer and a hiring CFO.</p>'+
+      '<p class="hint ai-off">'+esc(noAiNote())+' Until then, pick a persona and rehearse your reply out loud.</p>'+
+      '<div class="chips cwrap" role="group" aria-label="Personas">'+ALLPERSONAS.map(p=>'<button class="chip" data-per="'+p.id+'" aria-pressed="'+(!!persona&&persona.id===p.id)+'">'+esc(p.n)+'</button>').join("")+'</div>'+
+      (persona? '<div class="chat" id="chat"><div class="msg them"><span class="who">'+esc(persona.n)+'</span>'+esc(persona.o)+'</div>'+chat.map(m=>'<div class="msg '+(m.role==="user"?"me":"them")+'">'+(m.role==="user"?"":'<span class="who">'+esc(persona.n)+'</span>')+esc(m.content)+'</div>').join("")+'</div>'+
+        '<div class="ai-only"><textarea class="field" id="chatIn" placeholder="Your reply (dictate it to practise speaking)" style="min-height:80px"></textarea>'+
+        '<div class="btns"><button class="btn primary" id="chatSend">Send</button><button class="btn ghost" id="chatDebrief">Debrief me</button><button class="btn ghost" id="chatReset">Start over</button></div></div>'
+       : '<p class="hint">Choose who you want to practise with.</p>');
+  }
+  return '<h1>Speak</h1><div class="seg" role="group" aria-label="Practice type">'+segs.map(s=>'<button data-seg="'+s[0]+'" aria-pressed="'+(s[0]===speakSeg)+'">'+s[1]+'</button>').join("")+'</div><div class="sec">'+body+'</div>';
+}
+function rulesFor(p){ return profile()+"\n\nRole-play for practice. You are "+p.d+" Stay in character. Reply as a real person would: 2 to 4 sentences, natural spoken English, realistic pushback, no stage directions. You opened the scene by saying: \""+p.o+"\"\n\nIf the learner's message is exactly DEBRIEF, step out of character and coach them with headings: ### What landed ### What to say differently ### Two phrases to reuse. Under 220 words."; }
+async function sendChat(text, debrief){
+  if(!aiOn()) return;
+  const turns = [{role:"user", content:rulesFor(persona)}];
+  chat.slice(-16).forEach(m=>turns.push({role:m.role, content:m.content}));
+  turns.push({role:"user", content: debrief? "DEBRIEF" : text});
+  if(!debrief) chat.push({role:"user", content:text});
+  const box = $("#chat");
+  if(!debrief){ const me=document.createElement("div"); me.className="msg me"; me.textContent=text; box.appendChild(me); }
+  const b = document.createElement("div"); b.className="msg them"; b.innerHTML='<span class="who">'+esc(debrief?"Coach":persona.n)+'</span><span class="tx">Thinking…</span>'; box.appendChild(b);
+  b.scrollIntoView({block:"end", behavior:"smooth"});
+  const send=$("#chatSend"), deb=$("#chatDebrief"); send.disabled=true; deb.disabled=true;
+  chatCtl = new AbortController();
+  try{
+    const r = await aiText(turns, {cache:false, tier:"quick", signal:chatCtl.signal, max:700, onText:({text})=>{ b.querySelector(".tx").innerHTML = debrief? md(text) : esc(text); }});
+    if(!debrief) chat.push({role:"assistant", content:r.text}); else b.querySelector(".tx").innerHTML = md(r.text);
+    markActive(); save();
+  }catch(e){
+    if(e && e.code==="cancelled") return;
+    b.querySelector(".tx").innerHTML = errHTML(e);
+    if(!debrief) chat.pop();
+  }finally{ if(document.body.contains(send)){ send.disabled=false; deb.disabled=false; } }
+}
+
+/* ---------- Pulse ---------- */
+function vPulse(){
+  const s = SOURCES[hash(today())%SOURCES.length];
+  return '<h1>Pulse</h1><p class="lede">Current awareness in small doses: scan, pick one item, decode it, keep the talking point.</p>'+
+  '<div class="sec"><p>This week\'s lenses: <b>'+esc(WEEKS[weekOf("tech")-1].t)+'</b> on the tech line and <b>'+esc(CFO_WEEKS[weekOf("cfo")-1].t)+'</b> on the CFO line.</p></div>'+
+  (STANDALONE? '<div class="sec"><h2>Today\'s briefing</h2>'+briefHTML()+'</div><div class="sec"><h2>Live headlines</h2>'+headlinesHTML(10)+'</div>' : '')+
+  '<div class="sec ask"><label for="hl">Decode a headline</label><textarea class="field" id="hl" placeholder="Paste a headline or the first paragraph of an article" style="min-height:90px"></textarea>'+
+  '<div class="btns ai-only"><button class="btn primary small" id="hlGo">Decode it</button></div>'+
+  '<p class="hint ai-off">'+esc(noAiNote())+'</p>'+
+  '<p class="hint">The decoder works only from the text you paste, so verify anything you plan to repeat.</p><div class="out" id="hlOut"></div></div>'+
+  '<div class="sec"><h2>Today\'s pick: '+esc(s.n)+'</h2><p class="lede">'+esc(s.w)+'</p><div class="btns"><a class="btn signal small" href="'+s.u+'" target="_blank" rel="noopener">Open '+esc(s.n)+'</a></div></div>'+
+  '<div class="sec"><h2>All sources</h2><ul class="src">'+SOURCES.map(x=>'<li><a href="'+x.u+'" target="_blank" rel="noopener"><span><b>'+esc(x.n)+'</b><span>'+esc(x.w)+'</span></span><span class="go">Open</span></a></li>').join("")+'</ul></div>';
+}
+function decode(out, btn, src){
+  const t = (src||"").trim(); if(t.length<12){ toast("Paste a headline first"); return Promise.resolve(null); }
+  return askAI(profile()+"\n\nThey read this headline or excerpt:\n\"\"\"\n"+t.slice(0,6000)+"\n\"\"\"\nWork only from this text and general knowledge; don't invent details. Headings: ### What it means (3 plain sentences) ### Why it matters to an APAC enterprise IS portfolio or a finance leader (2 to 3 bullets) ### A question to ask my team ### A line I could say in a meeting or an interview. Under 220 words.", out, {button:btn});
+}
+
+/* ---------- Me ---------- */
+function vMe(){
+  const days=[]; for(let i=27;i>=0;i--) days.push(addDays(today(),-i));
+  const bc = d=>Object.keys(S.bursts[d]||{}).length;
+  const deepDays = new Set(Object.values(S.lessons));
+  const weekBursts = days.slice(-7).reduce((a,d)=>a+bc(d),0);
+  const mastered = Object.values(S.cards).filter(r=>r.b>=4).length;
+  const takes = LESSONS.filter(l=>S.notes[l.id]&&S.notes[l.id].take&&S.notes[l.id].take.trim()).slice(-8).reverse();
+  const key = apiKey(), model = apiModel();
+  return '<button class="back" data-tab="today">Back to today</button><h1>Progress</h1><p class="lede">'+esc(syncLabel)+'.</p>'+
+  '<div class="sec stats"><div class="stat"><b>'+streak()+'</b><span>Day streak</span></div><div class="stat"><b>'+Object.keys(S.iv||{}).length+'</b><span>Interview questions practised</span></div>'+
+  '<div class="stat"><b>'+doneCount("tech")+'/'+TRACKS.tech.total+'</b><span>Tech line sessions</span></div><div class="stat"><b>'+doneCount("cfo")+'/'+TRACKS.cfo.total+'</b><span>CFO line sessions</span></div>'+
+  '<div class="stat"><b>'+weekBursts+'</b><span>Bursts in the last 7 days</span></div><div class="stat"><b>'+mastered+'</b><span>Cards strong or mastered</span></div></div>'+
+  '<div class="sec"><h2>Last four weeks</h2><div class="heat">'+days.map(d=>'<i class="'+(deepDays.has(d)?"on":(bc(d)||S.act[d]?"half":""))+'" title="'+d+'"></i>').join("")+'</div><p class="hint">Dark: a focused session. Light: short breaks only.</p></div>'+
+  '<div class="sec"><h2>Terms you looked up</h2>'+(S.log.length?'<ul class="log">'+S.log.slice(0,15).map(x=>'<li>'+esc(x.t)+'<small>'+esc(x.d)+'</small></li>').join("")+'</ul>':'<p class="hint">Terms you ask about or capture in the reflection burst appear here.</p>')+'</div>'+
+  '<div class="sec"><h2>Your takeaways</h2>'+(takes.length?'<ul class="log">'+takes.map(l=>'<li>'+esc(S.notes[l.id].take).replace(/\n/g,"<br>")+'<small>'+esc(l.t)+'</small></li>').join("")+'</ul>':'<p class="hint">The three lines you write at the end of each session collect here.</p>')+'</div>'+
+  '<div class="sec settings"><h2>Settings</h2>'+
+   '<p class="hint">Which line should the daily session come from?</p><div class="seg" role="group" aria-label="Mix">'+[["balanced","Alternate"],["tech","Tech first"],["cfo","CFO first"]].map(m=>'<button data-mix="'+m[0]+'" aria-pressed="'+(S.set.mix===m[0])+'">'+m[1]+'</button>').join("")+'</div>'+
+   '<label class="hint" for="prof" style="display:block;margin-top:16px">About you, used to tailor Claude\'s coaching. Stays on this device.</label><textarea class="field" id="prof" placeholder="'+esc(DEFAULT_PROFILE)+'">'+esc(S.set.profile||"")+'</textarea>'+
+   (STANDALONE? '<h3 style="margin-top:20px">Claude features</h3><p class="hint">Paste an Anthropic API key to switch on coaching, roleplays and the daily briefing. The key is stored only on this phone and sent only to Anthropic.</p>'+
+     '<input class="field" id="key" type="password" autocomplete="off" placeholder="sk-ant-…" value="'+esc(key)+'">'+
+     '<label class="hint" for="model" style="display:block;margin-top:10px">Model</label><select class="field" id="model">'+MODELS.map(m=>'<option value="'+m[0]+'"'+(m[0]===model?' selected':'')+'>'+esc(m[1])+'</option>').join("")+'</select>'+
+     '<div class="btns"><button class="btn primary small" id="keySave">Save key</button><button class="btn ghost small" id="keyTest">Test it</button>'+(key?'<button class="btn ghost small" id="keyDel">Remove key</button>':'')+'</div><div class="out" id="keyOut"></div>'+
+     '<h3 style="margin-top:20px">Backup</h3><p class="hint">Your progress lives only on this phone. Export a backup now and then.</p><div class="btns"><button class="btn ghost small" id="exp">Export backup</button><label class="btn ghost small" for="imp">Import backup</label><input type="file" id="imp" accept="application/json,.json" hidden></div>' : '')+
+   '<div class="btns" style="margin-top:20px"><button class="btn ghost small" id="resetAll">Reset all progress</button></div></div>';
+}
+
+/* ---------- bursts ---------- */
+function openBurst(k){
+  if(k==="cards") return cardSession();
+  if(k==="interview") return interviewSheet();
+  if(k==="explain"){
+    const pool = unlockedCards(); const c = pool[hash(today()+"x")%pool.length];
+    sheet("Explain it in 60 seconds",
+     '<p>Your concept:</p><div class="say">'+esc(c.t)+'</div><p>Start a 60-second timer. Explain it out loud as if to a stakeholder or an interviewer: what it is, why it matters, one example. Then dictate or type what you said.</p>'+
+     '<textarea class="field" id="exIn" placeholder="What I said"></textarea>'+
+     '<div class="btns"><button class="btn ghost small ai-only" id="exFb">Get feedback</button><button class="btn ghost small" id="exPeek">Check the card</button><button class="btn primary small" id="exDone">Mark done</button></div><div class="out" id="exOut"></div>',
+     ()=>{
+      $("#exPeek").onclick=()=>{ $("#exOut").innerHTML='<h3>'+esc(c.t)+'</h3><p>'+esc(c.d)+'</p><p class="hint">'+esc(c.p||"")+'</p>'; };
+      $("#exDone").onclick=()=>{ doneBurst("explain"); closeSheet(); render(); };
+      const fb=$("#exFb"); if(fb) fb.onclick=()=>{ const t=$("#exIn").value.trim(); if(t.length<15){toast("Say or type a bit more first");return;}
+        askAI(profile()+"\n\nThey explained \""+c.t+"\" out loud in about 60 seconds. Reference meaning: "+c.d+"\nTheir words (from dictation; ignore dictation errors):\n\"\"\"\n"+t.slice(0,3000)+"\n\"\"\"\nHeadings: ### Accurate? (one line) ### What to add or cut ### A sharper version (under 90 words). Under 200 words.", $("#exOut"), {button:fb, cache:false, tier:"quick"}); };
+     });
+    return;
+  }
+  if(k==="phrase"){
+    const all = PHRASES.flatMap(s=>s.p.map(p=>({s:s.s,p:p}))); const x = all[hash(today()+"p")%all.length];
+    sheet("Phrase drill",
+     '<p class="hint">'+esc(x.s)+'</p><div class="say">'+esc(x.p)+'</div><p>Say it three times out loud. Then write the version you\'ll actually use this week, with a real project in it.</p>'+
+     '<textarea class="field" id="phIn" placeholder="My version"></textarea>'+
+     '<div class="btns"><button class="btn ghost small ai-only" id="phPol">Polish my version</button><button class="btn primary small" id="phDone">Mark done</button></div><div class="out" id="phOut"></div>',
+     ()=>{
+      $("#phDone").onclick=()=>{ doneBurst("phrase"); closeSheet(); render(); };
+      const pb=$("#phPol"); if(pb) pb.onclick=()=>{ const t=$("#phIn").value.trim(); if(!t){toast("Write your version first");return;}
+        askAI(profile()+"\n\nSituation: "+x.s+". Model phrase: \""+x.p+"\". Their version: \""+t.slice(0,800)+"\". Give two polished alternatives (one more direct, one more diplomatic for high-context APAC audiences) and one sentence on when to use which. Under 120 words.", $("#phOut"), {button:pb, cache:false, tier:"quick"}); };
+     });
+    return;
+  }
+  if(k==="pulse"){
+    const s = SOURCES[hash(today())%SOURCES.length];
+    sheet("Pulse scan",
+     (STANDALONE? '<p>Pick one headline that touches IS delivery, cloud, security, AI or corporate finance.</p>'+headlinesHTML(6) : '<p>Open today\'s source, skim for three minutes, and pick one headline that touches IS delivery, cloud, security, AI or corporate finance.</p>')+
+     '<div class="btns"><a class="btn signal small" href="'+s.u+'" target="_blank" rel="noopener">Open '+esc(s.n)+'</a></div>'+
+     '<p style="margin-top:14px">Paste or tap Decode on a headline:</p><textarea class="field" id="psIn" style="min-height:80px"></textarea>'+
+     '<div class="btns"><button class="btn ghost small ai-only" id="psGo">Decode it</button><button class="btn primary small" id="psDone">Mark done</button></div><div class="out" id="psOut"></div>',
+     ()=>{
+      $("#psDone").onclick=()=>{ doneBurst("pulse"); closeSheet(); render(); };
+      const g=$("#psGo"); if(g) g.onclick=()=>decode($("#psOut"), g, $("#psIn").value);
+      document.querySelectorAll("#sheetBody [data-dec]").forEach(b=>b.onclick=()=>{ $("#psIn").value=b.dataset.dec; if(aiOn()) decode($("#psOut"), $("#psGo"), b.dataset.dec); });
+     });
+    return;
+  }
+  if(k==="reflect"){
+    sheet("What did I hear today?",
+     '<p>Any term, acronym or idea from today\'s meetings or emails that you didn\'t fully follow? Capture it while it\'s fresh.</p>'+
+     '<div class="inline"><input class="field" id="rfIn" placeholder="e.g. egress costs, SoD conflict" autocomplete="off"><button class="btn primary small" id="rfAdd">Save</button></div>'+
+     '<div class="out" id="rfOut"></div><div class="btns"><button class="btn ghost small" id="rfDone">Nothing new today, mark done</button></div>',
+     ()=>{
+      const add=()=>{ const t=$("#rfIn").value.trim(); if(!t) return; S.log.unshift({d:today(),t:t}); S.log=S.log.slice(0,200); doneBurst("reflect"); $("#rfIn").value="";
+        if(aiOn()) askAI(profile()+"\n\nExplain \""+t+"\" as used in an enterprise IS or corporate finance context. Headings: ### Plain meaning (2 sentences) ### Why it matters to me (1 sentence) ### A smart question to ask. Under 110 words.", $("#rfOut"), {tier:"quick"});
+        else $("#rfOut").innerHTML='<p>Saved. You\'ll find it under Progress.</p>';
+      };
+      $("#rfAdd").onclick=add; $("#rfIn").addEventListener("keydown",e=>{ if(e.key==="Enter") add(); });
+      $("#rfDone").onclick=()=>{ doneBurst("reflect"); closeSheet(); render(); };
+     });
+  }
+}
+
+/* ---------- sheet ---------- */
+let lastFocus=null;
+function sheet(title, html, after){
+  lastFocus = document.activeElement;
+  $("#sheetBody").innerHTML = '<div class="shead"><h2 id="sheetTitle">'+esc(title)+'</h2><button class="x" id="sx">Close</button></div><div class="sbody">'+html+'</div>';
+  $("#scrim").classList.add("open"); $("#sheet").classList.add("open"); $("#sheet").scrollTop=0;
+  $("#sx").onclick = closeSheet;
+  if(after) after();
+  setTimeout(()=>{ const x=$("#sx"); if(x) x.focus(); }, 50);
+}
+function closeSheet(){ $("#scrim").classList.remove("open"); $("#sheet").classList.remove("open"); if(lastFocus&&lastFocus.focus) lastFocus.focus(); }
+$("#scrim").onclick = closeSheet;
+document.addEventListener("keydown", e=>{ if(e.key==="Escape") closeSheet(); });
+
+/* ---------- binding ---------- */
+function bind(){
+  document.querySelectorAll("#view [data-open]").forEach(b=>b.onclick=()=>go("path", b.dataset.open));
+  document.querySelectorAll("#view [data-burst]").forEach(b=>b.onclick=()=>openBurst(b.dataset.burst));
+  document.querySelectorAll("#view [data-week]").forEach(b=>b.onclick=()=>{ const el=$("#wk"+b.dataset.week); el.hidden=!el.hidden; b.setAttribute("aria-expanded", String(!el.hidden)); });
+  document.querySelectorAll("#view [data-dec]").forEach(b=>b.onclick=()=>{ const h=$("#hl"); if(h){ h.value=b.dataset.dec; h.scrollIntoView({block:"center",behavior:"smooth"}); if(aiOn()) decode($("#hlOut"), $("#hlGo"), b.dataset.dec); } });
+  const bg=$("#briefGo"); if(bg) bg.onclick=()=>runBrief(bg);
+  if(tab==="today"){
+    const g=$("#termGo"); if(g) g.onclick=explainTerm;
+    $("#termQ").addEventListener("keydown",e=>{ if(e.key==="Enter"&&aiOn()) explainTerm(); });
+    const sw=$("#swap"); if(sw) sw.onclick=()=>{ const tr=todayTrack(); S.pick={d:today(), t: tr==="tech"?"cfo":"tech"}; save(); render(); };
+  }
+  if(tab==="path"){
+    if(sub) bindLesson(sub);
+    document.querySelectorAll("[data-ptrack]").forEach(b=>b.onclick=()=>{ pathTrack=b.dataset.ptrack; render(); });
+  }
+  if(tab==="cards"){
+    $("#quizBtn").onclick=quizSession;
+    $("#cfind").addEventListener("input", e=>{ const q=e.target.value.toLowerCase().trim(); document.querySelectorAll("#gloss details").forEach(d=>{ d.hidden = !!q && !d.dataset.q.includes(q); }); });
+    document.querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>{ S.custom=S.custom.filter(c=>c.id!==b.dataset.del); delete S.cards[b.dataset.del]; save(); render(); });
+  }
+  if(tab==="speak"){
+    document.querySelectorAll("[data-seg]").forEach(b=>b.onclick=()=>{ speakSeg=b.dataset.seg; lset("seg",speakSeg); render(); });
+    document.querySelectorAll("[data-ivcat]").forEach(b=>b.onclick=()=>{ ivCat=b.dataset.ivcat; render(); });
+    document.querySelectorAll("[data-iv]").forEach(b=>b.onclick=()=>interviewSheet(INTERVIEW[+b.dataset.iv]));
+    document.querySelectorAll("[data-story]").forEach(b=>b.onclick=()=>storySheet(b.dataset.story));
+    const sn=$("#stNew"); if(sn) sn.onclick=()=>storySheet(null);
+    document.querySelectorAll("[data-sit]").forEach(b=>b.onclick=()=>{ sitIdx=+b.dataset.sit; render(); });
+    document.querySelectorAll("[data-per]").forEach(b=>b.onclick=()=>{ if(chatCtl) chatCtl.abort(); persona=ALLPERSONAS.find(p=>p.id===b.dataset.per); chat=[]; render(); });
+    const send=$("#chatSend");
+    if(send){
+      send.onclick=()=>{ const t=$("#chatIn").value.trim(); if(!t) return; $("#chatIn").value=""; sendChat(t,false); };
+      $("#chatDebrief").onclick=()=>{ if(!chat.length){toast("Reply at least once first");return;} sendChat("",true); };
+      $("#chatReset").onclick=()=>{ if(chatCtl) chatCtl.abort(); chat=[]; render(); };
+    }
+  }
+  if(tab==="pulse"){
+    const g=$("#hlGo"); if(g) g.onclick=()=>decode($("#hlOut"), g, $("#hl").value).then(r=>{ if(r) doneBurst("pulse"); });
+    if(STANDALONE && hnState.status==="idle") loadHeadlines(false);
+  }
+  if(tab==="me"){
+    document.querySelectorAll("[data-mix]").forEach(b=>b.onclick=()=>{ S.set.mix=b.dataset.mix; S.pick=null; save(); render(); });
+    const pf=$("#prof"); pf.addEventListener("input",()=>{ clearTimeout(pf._t); pf._t=setTimeout(()=>{ S.set.profile=pf.value; save(); },600); });
+    const ks=$("#keySave");
+    if(ks){
+      ks.onclick=()=>{ const v=$("#key").value.trim(); lset("key", v||null); lset("model", $("#model").value); refreshAI(); toast(v?"Key saved on this phone":"Key removed"); render(); };
+      $("#model").onchange=()=>{ lset("model", $("#model").value); toast("Model saved"); };
+      $("#keyTest").onclick=()=>{ const v=$("#key").value.trim(); if(v) lset("key",v); lset("model",$("#model").value); refreshAI(); askAI("Reply with exactly: Connected. Ready to coach.", $("#keyOut"), {button:$("#keyTest"), max:30}); };
+      const kd=$("#keyDel"); if(kd) kd.onclick=()=>{ lset("key",null); lset("brief",null); refreshAI(); toast("Key removed"); render(); };
+      $("#exp").onclick=()=>{ const blob=new Blob([JSON.stringify(S,null,1)],{type:"application/json"}); const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download="fluency-line-backup-"+today()+".json"; document.body.appendChild(a); a.click(); setTimeout(()=>{URL.revokeObjectURL(a.href); a.remove();},1000); };
+      $("#imp").onchange=e=>{ const f=e.target.files[0]; if(!f) return; f.text().then(t=>{ const d=JSON.parse(t); if(!d||typeof d!=="object"||!d.lessons) throw 0; if(confirm("Replace this phone's progress with the backup?")){ S=Object.assign(blank(), d); S.set=Object.assign({mix:"balanced",profile:""},S.set||{}); save(); render(); toast("Backup restored"); } }).catch(()=>toast("That file isn't a Fluency Line backup")); };
+    }
+    $("#resetAll").onclick=()=>{ if(confirm("Reset all sessions, cards, stories and notes? This can't be undone.")){ S=blank(); save(); render(); } };
+  }
+}
+
+/* ---------- PWA ---------- */
+if(STANDALONE){
+  try{
+    const l=document.createElement("link"); l.rel="manifest"; l.href="manifest.webmanifest"; document.head.appendChild(l);
+    if("serviceWorker" in navigator && location.protocol==="https:") navigator.serviceWorker.register("sw.js").catch(()=>{});
+  }catch(e){}
+  loadHeadlines(false);
+}
+
+render();
+initAI();
+initRemote();
+})();
+
+</script>
+</body>
+</html>
